@@ -12,19 +12,23 @@ namespace BugTracker.Models
         public int CompanyId { get; set; }
 
         [Required]
+        [Display(Name = "Name")]
+        [StringLength(300, ErrorMessage = "The {0} must be at least {2} and max {1} characters long.", MinimumLength = 2)]
         public string? Name { get; set; }
 
         [Required]
+        [Display(Name = "Description")]
+        [StringLength(800, ErrorMessage = "The {0} must be at least {2} and max {1} characters long.", MinimumLength = 2)]
         public string? Description { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? Created { get; set; }
+        public DateTime Created { get; set; }
 
         [DataType(DataType.DateTime)]
         public DateTime StartDate { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public int ProjectPriorityId { get; set; }
 
@@ -42,8 +46,8 @@ namespace BugTracker.Models
 
         public virtual ProjectPriority? ProjectPriority { get; set; }
 
-        public virtual ICollection<BTUser>? Members { get; set; }
+        public virtual ICollection<BTUser> Members { get; set; } = new HashSet<BTUser>();
 
-        public virtual ICollection<Ticket>? Tickets { get; set; }
+        public virtual ICollection<Ticket> Tickets { get; set; } = new HashSet<Ticket>();
     }
 }

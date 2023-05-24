@@ -11,11 +11,12 @@ namespace BugTracker.Models
         public string? Comment { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? Created { get; set; }
+        public DateTime Created { get; set; }
 
         // Foreign Keys
         public int TicketId { get; set; }
 
+        [Required]
         public string? UserId { get; set; }
 
         // Navigation Properties

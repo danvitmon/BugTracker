@@ -21,13 +21,15 @@ namespace BugTracker.Models
         public int NotificationTypeId { get; set; }
 
         [Required]
+        [Display(Name = "Title")]
+        [StringLength(300, ErrorMessage = "The {0} must be at least {2} and max {1} characters long.", MinimumLength = 2)]
         public string? Title { get; set; }
 
         [Required]
         public string? Message { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime? Created { get; set; }
+        public DateTime Created { get; set; }
 
         public bool HasBeenViewed { get; set; }
 
