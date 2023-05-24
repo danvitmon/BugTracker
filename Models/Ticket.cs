@@ -45,15 +45,15 @@ namespace BugTracker.Models
 
         public virtual TicketStatus? TicketStatus { get; set; }
 
-        public virtual DeveloperUser? DeveloperUser { get; set; }
+        public virtual BTUser? DeveloperUser { get; set; }
 
-        public virtual SubmitterUser? SubmitterUser { get; set; }
+        public virtual BTUser? SubmitterUser { get; set; }
 
-        public virtual TicketHistory? History { get; set; }
+        public virtual ICollection<TicketHistory>? History { get; set; } = new HashSet<TicketHistory>();
 
-        public virtual ICollection<TicketComment>? Comments { get; set; }
+        public virtual ICollection<TicketComment>? Comments { get; set; } = new HashSet<TicketComment>();
 
-        public virtual ICollection<TicketAttachment>? Attachments { get; set; }
+        public virtual ICollection<TicketAttachment>? Attachments { get; set; } = new HashSet<TicketAttachment>();
 
     }
 }

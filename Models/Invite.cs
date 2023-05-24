@@ -11,14 +11,14 @@ namespace BugTracker.Models
         public DateTime InviteDate { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime JoinDate { get; set; }
+        public DateTime? JoinDate { get; set; }
 
         public Guid CompanyToken { get; set; }
 
         // Foreign Key
         public int CompanyId { get; set; }
 
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
 
         [Required]
         public string? InvitorId { get; set; }
@@ -44,9 +44,9 @@ namespace BugTracker.Models
 
         public virtual Project? Project { get; set; }
 
-        public virtual Invitor? Invitor { get; set; }
+        public virtual BTUser? Invitor { get; set; }
 
-        public virtual Invitee? Invitee { get; set; }
+        public virtual BTUser? Invitee { get; set; }
 
     }
 }

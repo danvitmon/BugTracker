@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BugTracker.Models
 {
@@ -10,8 +11,10 @@ namespace BugTracker.Models
         [Required]
         public string? LastName { get; set;}
 
-        public string? FullName { get; set;}
+        [NotMapped]
+        public string? FullName { get { return $"{FirstName} {LastName}"; } }
 
+        [NotMapped]
         public IFormFile? ImageFormFile { get; set;}
 
         public byte[]? ImageFileData { get; set;}
@@ -22,6 +25,6 @@ namespace BugTracker.Models
 
         public virtual Company? Company { get; set;}
 
-        public virtual ICollection<Project>? Projects { get; set;}
+        public virtual ICollection<Project>? Projects { get; set;} = new HashSet<Project>();
     }
 }

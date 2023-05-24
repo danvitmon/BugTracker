@@ -27,7 +27,7 @@ namespace BugTracker.Models
         public string? Message { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
 
         public bool HasBeenViewed { get; set; }
 
@@ -39,9 +39,9 @@ namespace BugTracker.Models
 
         public virtual Project? Project { get; set; }
 
-        public virtual Sender? Sender { get; set; }
+        public virtual BTUser? Sender { get; set; }
 
-        public virtual Recipient? Recipient { get; set; }
+        public virtual BTUser? Recipient { get; set; }
 
     }
 }
