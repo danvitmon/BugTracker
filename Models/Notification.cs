@@ -21,7 +21,6 @@ namespace BugTracker.Models
         public int NotificationTypeId { get; set; }
 
         [Required]
-        [Display(Name = "Title")]
         [StringLength(300, ErrorMessage = "The {0} must be at least {2} and max {1} characters long.", MinimumLength = 2)]
         public string? Title { get; set; }
 
