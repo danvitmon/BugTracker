@@ -16,7 +16,7 @@ namespace BugTracker.Models
         public int TicketId { get; set; }
 
         [Required]
-        public string? BTUserId { get; set; }
+        public string? UserId { get; set; }
 
         [NotMapped]
         public IFormFile? FormFile { get; set; }
@@ -27,6 +27,6 @@ namespace BugTracker.Models
 
         public virtual Ticket? Ticket { get; set; }
 
-        public virtual BTUser? BTUser { get; set; }
+        public virtual BTUser? User { get; set; }
     }
 }
