@@ -22,20 +22,20 @@ namespace BugTracker.Controllers
         // GET: NotificationTypes
         public async Task<IActionResult> Index()
         {
-              return _context.NotificationType != null ? 
-                          View(await _context.NotificationType.ToListAsync()) :
+              return _context.NotificationTypes != null ? 
+                          View(await _context.NotificationTypes.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.NotificationType'  is null.");
         }
 
         // GET: NotificationTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.NotificationType == null)
+            if (id == null || _context.NotificationTypes == null)
             {
                 return NotFound();
             }
 
-            var notificationType = await _context.NotificationType
+            var notificationType = await _context.NotificationTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notificationType == null)
             {
@@ -70,12 +70,12 @@ namespace BugTracker.Controllers
         // GET: NotificationTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.NotificationType == null)
+            if (id == null || _context.NotificationTypes == null)
             {
                 return NotFound();
             }
 
-            var notificationType = await _context.NotificationType.FindAsync(id);
+            var notificationType = await _context.NotificationTypes.FindAsync(id);
             if (notificationType == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace BugTracker.Controllers
         // GET: NotificationTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.NotificationType == null)
+            if (id == null || _context.NotificationTypes == null)
             {
                 return NotFound();
             }
 
-            var notificationType = await _context.NotificationType
+            var notificationType = await _context.NotificationTypes
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (notificationType == null)
             {
@@ -141,14 +141,14 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            if (_context.NotificationType == null)
+            if (_context.NotificationTypes == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.NotificationType'  is null.");
             }
-            var notificationType = await _context.NotificationType.FindAsync(id);
+            var notificationType = await _context.NotificationTypes.FindAsync(id);
             if (notificationType != null)
             {
-                _context.NotificationType.Remove(notificationType);
+                _context.NotificationTypes.Remove(notificationType);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace BugTracker.Controllers
 
         private bool NotificationTypeExists(int? id)
         {
-          return (_context.NotificationType?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.NotificationTypes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

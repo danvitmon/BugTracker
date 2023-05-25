@@ -22,20 +22,20 @@ namespace BugTracker.Controllers
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-              return _context.Company != null ? 
-                          View(await _context.Company.ToListAsync()) :
+              return _context.Companies != null ? 
+                          View(await _context.Companies.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Company'  is null.");
         }
 
         // GET: Companies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Company == null)
+            if (id == null || _context.Companies == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Company
+            var company = await _context.Companies
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (company == null)
             {
@@ -70,12 +70,12 @@ namespace BugTracker.Controllers
         // GET: Companies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Company == null)
+            if (id == null || _context.Companies == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Company.FindAsync(id);
+            var company = await _context.Companies.FindAsync(id);
             if (company == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace BugTracker.Controllers
         // GET: Companies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Company == null)
+            if (id == null || _context.Companies == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Company
+            var company = await _context.Companies
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (company == null)
             {
@@ -141,14 +141,14 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Company == null)
+            if (_context.Companies == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Company'  is null.");
             }
-            var company = await _context.Company.FindAsync(id);
+            var company = await _context.Companies.FindAsync(id);
             if (company != null)
             {
-                _context.Company.Remove(company);
+                _context.Companies.Remove(company);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace BugTracker.Controllers
 
         private bool CompanyExists(int id)
         {
-          return (_context.Company?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

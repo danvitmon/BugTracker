@@ -22,19 +22,19 @@ namespace BugTracker.Controllers
         // GET: TicketComments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TicketComment.Include(t => t.Ticket).Include(t => t.User);
+            var applicationDbContext = _context.TicketComments.Include(t => t.Ticket).Include(t => t.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: TicketComments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.TicketComment == null)
+            if (id == null || _context.TicketComments == null)
             {
                 return NotFound();
             }
 
-            var ticketComment = await _context.TicketComment
+            var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -49,7 +49,7 @@ namespace BugTracker.Controllers
         // GET: TicketComments/Create
         public IActionResult Create()
         {
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description");
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
             return View();
         }
@@ -67,7 +67,7 @@ namespace BugTracker.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketComment.TicketId);
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
@@ -75,17 +75,17 @@ namespace BugTracker.Controllers
         // GET: TicketComments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.TicketComment == null)
+            if (id == null || _context.TicketComments == null)
             {
                 return NotFound();
             }
 
-            var ticketComment = await _context.TicketComment.FindAsync(id);
+            var ticketComment = await _context.TicketComments.FindAsync(id);
             if (ticketComment == null)
             {
                 return NotFound();
             }
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketComment.TicketId);
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
@@ -122,7 +122,7 @@ namespace BugTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketComment.TicketId);
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketComment.UserId);
             return View(ticketComment);
         }
@@ -130,12 +130,12 @@ namespace BugTracker.Controllers
         // GET: TicketComments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.TicketComment == null)
+            if (id == null || _context.TicketComments == null)
             {
                 return NotFound();
             }
 
-            var ticketComment = await _context.TicketComment
+            var ticketComment = await _context.TicketComments
                 .Include(t => t.Ticket)
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -152,14 +152,14 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.TicketComment == null)
+            if (_context.TicketComments == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.TicketComment'  is null.");
             }
-            var ticketComment = await _context.TicketComment.FindAsync(id);
+            var ticketComment = await _context.TicketComments.FindAsync(id);
             if (ticketComment != null)
             {
-                _context.TicketComment.Remove(ticketComment);
+                _context.TicketComments.Remove(ticketComment);
             }
             
             await _context.SaveChangesAsync();
@@ -168,7 +168,7 @@ namespace BugTracker.Controllers
 
         private bool TicketCommentExists(int id)
         {
-          return (_context.TicketComment?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.TicketComments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

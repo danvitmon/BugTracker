@@ -22,19 +22,19 @@ namespace BugTracker.Controllers
         // GET: Notifications
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Notification.Include(n => n.NotificationType).Include(n => n.Project).Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
+            var applicationDbContext = _context.Notifications.Include(n => n.NotificationType).Include(n => n.Project).Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Notifications/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Notification == null)
+            if (id == null || _context.Notifications == null)
             {
                 return NotFound();
             }
 
-            var notification = await _context.Notification
+            var notification = await _context.Notifications
                 .Include(n => n.NotificationType)
                 .Include(n => n.Project)
                 .Include(n => n.Recipient)
@@ -84,12 +84,12 @@ namespace BugTracker.Controllers
         // GET: Notifications/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Notification == null)
+            if (id == null || _context.Notifications == null)
             {
                 return NotFound();
             }
 
-            var notification = await _context.Notification.FindAsync(id);
+            var notification = await _context.Notifications.FindAsync(id);
             if (notification == null)
             {
                 return NotFound();
@@ -145,12 +145,12 @@ namespace BugTracker.Controllers
         // GET: Notifications/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Notification == null)
+            if (id == null || _context.Notifications == null)
             {
                 return NotFound();
             }
 
-            var notification = await _context.Notification
+            var notification = await _context.Notifications
                 .Include(n => n.NotificationType)
                 .Include(n => n.Project)
                 .Include(n => n.Recipient)
@@ -170,14 +170,14 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Notification == null)
+            if (_context.Notifications == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Notification'  is null.");
             }
-            var notification = await _context.Notification.FindAsync(id);
+            var notification = await _context.Notifications.FindAsync(id);
             if (notification != null)
             {
-                _context.Notification.Remove(notification);
+                _context.Notifications.Remove(notification);
             }
             
             await _context.SaveChangesAsync();
@@ -186,7 +186,7 @@ namespace BugTracker.Controllers
 
         private bool NotificationExists(int id)
         {
-          return (_context.Notification?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Notifications?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

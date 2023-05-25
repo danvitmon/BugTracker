@@ -49,7 +49,7 @@ namespace BugTracker.Controllers
         // GET: TicketHistories/Create
         public IActionResult Create()
         {
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description");
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
             return View();
         }
@@ -67,7 +67,7 @@ namespace BugTracker.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketHistory.TicketId);
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketHistory.UserId);
             return View(ticketHistory);
         }
@@ -85,7 +85,7 @@ namespace BugTracker.Controllers
             {
                 return NotFound();
             }
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketHistory.TicketId);
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketHistory.UserId);
             return View(ticketHistory);
         }
@@ -122,7 +122,7 @@ namespace BugTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TicketId"] = new SelectList(_context.Ticket, "Id", "Description", ticketHistory.TicketId);
+            ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
             ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketHistory.UserId);
             return View(ticketHistory);
         }
