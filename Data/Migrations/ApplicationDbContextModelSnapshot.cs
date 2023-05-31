@@ -256,8 +256,6 @@ namespace BugTracker.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NotificationTypeId");
-
                     b.HasIndex("ProjectId");
 
                     b.HasIndex("RecipientId");
@@ -267,23 +265,6 @@ namespace BugTracker.Data.Migrations
                     b.HasIndex("TicketId");
 
                     b.ToTable("Notifications");
-                });
-
-            modelBuilder.Entity("BugTracker.Models.NotificationType", b =>
-                {
-                    b.Property<int?>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int?>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NotificationTypes");
                 });
 
             modelBuilder.Entity("BugTracker.Models.Project", b =>
@@ -659,12 +640,10 @@ namespace BugTracker.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -701,12 +680,10 @@ namespace BugTracker.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -777,12 +754,6 @@ namespace BugTracker.Data.Migrations
 
             modelBuilder.Entity("BugTracker.Models.Notification", b =>
                 {
-                    b.HasOne("BugTracker.Models.NotificationType", "NotificationType")
-                        .WithMany()
-                        .HasForeignKey("NotificationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BugTracker.Models.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
@@ -806,8 +777,6 @@ namespace BugTracker.Data.Migrations
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("NotificationType");
 
                     b.Navigation("Project");
 

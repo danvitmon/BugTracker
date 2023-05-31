@@ -10,7 +10,51 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <ul class="navbar-nav flex-grow-1">
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" asp-controller="Projects" asp-action="Index">Projects</a>
+                <ul class="dropdown-menu">
+                    @*<li>
+                        <a class="dropdown-item" asp-controller="Projects" asp-action="MyProjects">My Projects</a>
+                    </li>*@
+                    <li>
+                        @* All (unarchived) projects in this company *@
+                        <a class="dropdown-item" asp-controller="Projects" asp-action="Index">All Projects</a>
+                    </li>
+                    @*<li>
+                        <a class="dropdown-item" asp-controller="Projects" asp-action="ArchivedProjects">Archived Projects</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="Projects" asp-action="UnassignedProjects">Unassigned Projects</a>
+                    </li>*@
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link text-dark dropdown-toggle" data-bs-toggle="dropdown" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
+                <ul class="dropdown-menu">
+                    @*<li>
+                        <a class="dropdown-item" asp-controller="Tickets" asp-action="MyTickets">My Tickets</a>
+                    </li>*@
+                    <li>
+                        @* All (unarchived) tickets in this company *@
+                        <a class="dropdown-item" asp-controller="Tickets" asp-action="Index">All Tickets</a>
+                    </li>
+                    @*<li>
+                        <a class="dropdown-item" asp-controller="Tickets" asp-action="ArchivedTickets">Archived Tickets</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="Tickets" asp-action="UnassignedTickets">Unassigned Tickets</a>
+                    </li>*@
+                </ul>
+            </li>
+        </ul>
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BugTracker</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -23,13 +67,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Companies" asp-action="Index">Companies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Projects" asp-action="Index">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Tickets" asp-action="Index">Tickets</a>
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
-        </nav>
+        </nav>*@
     </header>
     <div class="container">
         <main role="main" class="pb-3">

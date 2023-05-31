@@ -1,4 +1,8 @@
-﻿@model IEnumerable<BugTracker.Models.Project>
+﻿@using BugTracker.Models.Enums;
+@using BugTracker.Services.Interfaces;
+@model IEnumerable<BugTracker.Models.Project>
+
+@inject IBTFileService _fileService;
 
 @{
     ViewData["Title"] = "Index";
@@ -19,6 +23,9 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ImageFormFile)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Created)
             </th>
             <th>
@@ -26,12 +33,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFileType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Archived)
@@ -55,6 +56,9 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
+                <img style="max-height: 200px;" src="@_fileService.ConvertByteArrayToFile(item.ImageFileData!,item.ImageFileType!,DefaultImage.ProjectImage)" alt="Project Image">
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Created)
             </td>
             <td>
@@ -64,24 +68,18 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageFileData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageFileType)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Archived)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Company.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProjectPriority.Id)
+                @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
             </td>
         </tr>
 }

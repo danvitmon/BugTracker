@@ -22,7 +22,7 @@ namespace BugTracker.Controllers
         // GET: Notifications
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Notifications.Include(n => n.NotificationType).Include(n => n.Project).Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
+            var applicationDbContext = _context.Notifications/*.Include(n => n.NotificationType)*/.Include(n => n.Project).Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace BugTracker.Controllers
             }
 
             var notification = await _context.Notifications
-                .Include(n => n.NotificationType)
+                //.Include(n => n.NotificationType)
                 .Include(n => n.Project)
                 .Include(n => n.Recipient)
                 .Include(n => n.Sender)
@@ -52,7 +52,7 @@ namespace BugTracker.Controllers
         // GET: Notifications/Create
         public IActionResult Create()
         {
-            ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id");
+            //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id");
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description");
             ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
             ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
@@ -73,7 +73,7 @@ namespace BugTracker.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
+            //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
             ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.RecipientId);
             ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.SenderId);
@@ -94,7 +94,7 @@ namespace BugTracker.Controllers
             {
                 return NotFound();
             }
-            ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
+            //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
             ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.RecipientId);
             ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.SenderId);
@@ -134,7 +134,7 @@ namespace BugTracker.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
+            //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
             ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
             ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.RecipientId);
             ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.SenderId);
@@ -151,7 +151,7 @@ namespace BugTracker.Controllers
             }
 
             var notification = await _context.Notifications
-                .Include(n => n.NotificationType)
+                //.Include(n => n.NotificationType)
                 .Include(n => n.Project)
                 .Include(n => n.Recipient)
                 .Include(n => n.Sender)

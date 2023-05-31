@@ -7,37 +7,50 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker.Data;
 using BugTracker.Models;
+using Microsoft.AspNetCore.Authorization;
+using BugTracker.Models.Enums;
+using Microsoft.AspNetCore.Identity;
+using BugTracker.Services.Interfaces;
+using System.ComponentModel.Design;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UserManager<BTUser> _userManager;
+        private readonly IBTFileService _fileService;
+        private readonly IBTProjectService _projectService;
 
-        public ProjectsController(ApplicationDbContext context)
+
+        public ProjectsController(UserManager<BTUser> userManager, IBTFileService fileService, IBTProjectService projectService)
         {
-            _context = context;
+            _userManager = userManager;
+            _fileService = fileService;
+            _projectService = projectService;
         }
 
         // GET: Projects
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Projects.Include(p => p.Company).Include(p => p.ProjectPriority);
-            return View(await applicationDbContext.ToListAsync());
+            BTUser? user = await _userManager.GetUserAsync(User);
+
+            return View(await _projectService.GetAllProjectsByCompanyIdAsync(user!.CompanyId));
         }
 
         // GET: Projects/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Projects == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .Include(p => p.Company)
-                .Include(p => p.ProjectPriority)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            BTUser? user = await _userManager.GetUserAsync(User);
+
+            var project = await _projectService.GetProjectByIdAsync(id.Value, user!.CompanyId);
             if (project == null)
             {
                 return NotFound();
@@ -47,10 +60,11 @@ namespace BugTracker.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
+        public async Task<IActionResult> Create()
         {
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name");
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id");
+            var priorities = await _projectService.GetProjectPrioritiesAsync();
+            ViewData["ProjectPriorityId"] = new SelectList(priorities, "Id", "Name");
             return View();
         }
 
@@ -59,34 +73,59 @@ namespace BugTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CompanyId,Name,Description,Created,StartDate,EndDate,ProjectPriorityId,ImageFileData,ImageFileType,Archived")] Project project)
+        [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
+        public async Task<IActionResult> Create([Bind("Name,Description,StartDate,EndDate,ProjectPriorityId,ImageFormFile")] Project project)
         {
+            ModelState.Remove("CompanyId");
+
             if (ModelState.IsValid)
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
+                project.Created = DateTime.UtcNow;
+                project.StartDate = DateTime.SpecifyKind(project.StartDate, DateTimeKind.Utc);
+                project.EndDate = DateTime.SpecifyKind(project.EndDate, DateTimeKind.Utc);
+
+                BTUser? user = await _userManager.GetUserAsync(User);
+                project.CompanyId = user!.CompanyId;
+
+                if (project.ImageFormFile is not null)
+                {
+                    project.ImageFileData = await _fileService.ConvertFileToByteArrayAsync(project.ImageFormFile);
+                    project.ImageFileType = project.ImageFormFile.ContentType;
+                }
+
+                if (User.IsInRole(nameof(BTRoles.ProjectManager)))
+                {
+                    project.Members.Add(user);
+                }
+
+                await _projectService.AddProjectAsync(project);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+
+            var priorities = await _projectService.GetProjectPrioritiesAsync();
+            ViewData["ProjectPriorityId"] = new SelectList(priorities, "Id", "Name");
             return View(project);
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Projects == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(id);
+            BTUser? user = await _userManager.GetUserAsync(User);
+
+            var project = await _projectService.GetProjectByIdAsync(id.Value, user!.CompanyId);
             if (project == null)
             {
                 return NotFound();
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+
+            var priorities = await _projectService.GetProjectPrioritiesAsync();
+            ViewData["ProjectPriorityId"] = new SelectList(priorities, "Id", "Name");
             return View(project);
         }
 
@@ -95,7 +134,8 @@ namespace BugTracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CompanyId,Name,Description,Created,StartDate,EndDate,ProjectPriorityId,ImageFileData,ImageFileType,Archived")] Project project)
+        [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Created,StartDate,EndDate,Archived,ImageFormFile,ImageFileData,ImageFileType,CompanyId,ProjectPriorityId")] Project project)
         {
             if (id != project.Id)
             {
@@ -106,39 +146,45 @@ namespace BugTracker.Controllers
             {
                 try
                 {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
+                    project.Created = DateTime.SpecifyKind(project.Created, DateTimeKind.Utc);
+                    project.StartDate = DateTime.SpecifyKind(project.StartDate, DateTimeKind.Utc);
+                    project.EndDate = DateTime.SpecifyKind(project.EndDate, DateTimeKind.Utc);
+
+                    if (project.ImageFormFile is not null)
+                    {
+                        project.ImageFileData = await _fileService.ConvertFileToByteArrayAsync(project.ImageFormFile);
+                        project.ImageFileType = project.ImageFormFile.ContentType;
+                    }
+
+                    BTUser? user = await _userManager.GetUserAsync(User);
+
+                    await _projectService.UpdateProjectAsync(project, user!.CompanyId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompanyId"] = new SelectList(_context.Companies, "Id", "Name", project.CompanyId);
-            ViewData["ProjectPriorityId"] = new SelectList(_context.Set<ProjectPriority>(), "Id", "Id", project.ProjectPriorityId);
+
+            var priorities = await _projectService.GetProjectPrioritiesAsync();
+            ViewData["ProjectPriorityId"] = new SelectList(priorities, "Id", "Name");
             return View(project);
         }
 
         // GET: Projects/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
+        public async Task<IActionResult> Archive(int? id)
         {
-            if (id == null || _context.Projects == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .Include(p => p.Company)
-                .Include(p => p.ProjectPriority)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            BTUser? user = await _userManager.GetUserAsync(User);
+
+            var project = await _projectService.GetProjectByIdAsync(id.Value, user!.CompanyId);
+
             if (project == null)
             {
                 return NotFound();
@@ -148,27 +194,20 @@ namespace BugTracker.Controllers
         }
 
         // POST: Projects/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Archive")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
+        public async Task<IActionResult> ArchiveConfirmed(int id)
         {
-            if (_context.Projects == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Project'  is null.");
-            }
-            var project = await _context.Projects.FindAsync(id);
+            BTUser? user = await _userManager.GetUserAsync(User);
+
+            var project = await _projectService.GetProjectByIdAsync(id, user!.CompanyId);
             if (project != null)
             {
-                _context.Projects.Remove(project);
+                await _projectService.ArchiveProjectAsync(project, user.CompanyId);
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool ProjectExists(int id)
-        {
-          return (_context.Projects?.Any(e => e.Id == id)).GetValueOrDefault();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

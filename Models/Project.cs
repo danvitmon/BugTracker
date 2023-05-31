@@ -9,6 +9,7 @@ namespace BugTracker.Models
         public int Id { get; set; }
 
         // Foreign Key
+        [Display(Name = "Company")]
         public int CompanyId { get; set; }
 
         [Required]
@@ -28,6 +29,7 @@ namespace BugTracker.Models
         [DataType(DataType.DateTime)]
         public DateTime EndDate { get; set; }
 
+        [Display(Name = "Project Priority")]
         public int ProjectPriorityId { get; set; }
 
         [NotMapped]

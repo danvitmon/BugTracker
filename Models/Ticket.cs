@@ -27,14 +27,19 @@ namespace BugTracker.Models
         public bool ArchivedByProject { get; set; }
 
         // Foreign Keys
+        [Display(Name = "Project")]
         public int ProjectId { get; set; }
 
+        [Display(Name = "Type")]
         public int TicketTypeId { get; set; }
 
+        [Display(Name = "Status")]
         public int TicketStatusId { get; set; }
 
+        [Display(Name = "Priority")]
         public int TicketPriorityId { get; set; }
 
+        [Display(Name = "Developer")]
         public string? DeveloperUserId { get; set; }
 
         [Required]

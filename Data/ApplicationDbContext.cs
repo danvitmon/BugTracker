@@ -13,7 +13,6 @@ namespace BugTracker.Data
         public virtual DbSet<Company> Companies { get; set; } = default!;
         public virtual DbSet<Invite> Invites { get; set; } = default!;
         public virtual DbSet<Notification> Notifications { get; set; } = default!;
-        public virtual DbSet<NotificationType> NotificationTypes { get; set; } = default!;
         public virtual DbSet<Project> Projects { get; set; } = default!;
         public virtual DbSet<ProjectPriority> ProjectPriorities { get; set; } = default!;
         public virtual DbSet<Ticket> Tickets { get; set; } = default!;
