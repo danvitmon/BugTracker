@@ -22,7 +22,7 @@ namespace BugTracker.Controllers
         // GET: TicketAttachments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.TicketAttachments.Include(t => t.Ticket).Include(t => t.User);
+            var applicationDbContext = _context.TicketAttachments.Include(t => t.Ticket).Include(t => t.BTUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace BugTracker.Controllers
 
             var ticketAttachment = await _context.TicketAttachments
                 .Include(t => t.Ticket)
-                .Include(t => t.User)
+                .Include(t => t.BTUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticketAttachment == null)
             {
@@ -68,7 +68,7 @@ namespace BugTracker.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketAttachment.UserId);
+            ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketAttachment.BTUserId);
             return View(ticketAttachment);
         }
 
@@ -86,7 +86,7 @@ namespace BugTracker.Controllers
                 return NotFound();
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketAttachment.UserId);
+            ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketAttachment.BTUserId);
             return View(ticketAttachment);
         }
 
@@ -123,7 +123,7 @@ namespace BugTracker.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketAttachment.TicketId);
-            ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketAttachment.UserId);
+            ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketAttachment.BTUserId);
             return View(ticketAttachment);
         }
 
@@ -137,7 +137,7 @@ namespace BugTracker.Controllers
 
             var ticketAttachment = await _context.TicketAttachments
                 .Include(t => t.Ticket)
-                .Include(t => t.User)
+                .Include(t => t.BTUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ticketAttachment == null)
             {

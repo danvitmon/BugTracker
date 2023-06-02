@@ -7,5 +7,7 @@ namespace BugTracker.Services.Interfaces
         Task<byte[]> ConvertFileToByteArrayAsync(IFormFile file);
 
         string? ConvertByteArrayToFile(byte[]? fileData, string? extension, DefaultImage defaultImage);
+        public string GetFileIcon(string file);
+        public string FormatFileSize(long bytes);
     }
 }

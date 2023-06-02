@@ -3,17 +3,13 @@
 @model IEnumerable<BugTracker.Models.Project>
 
 @inject IBTFileService _fileService;
-@inject IBTProjectService _projectService;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "All Projects";
 }
 
-<h1>Index</h1>
+<h1>All Projects</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -40,9 +36,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Company)
-            </th>
-            <th>
-                Project Manager
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProjectPriority)
@@ -79,27 +72,10 @@
                     @Html.DisplayFor(modelItem => item.Company.Name)
                 </td>
                 <td>
-                    @if (await _projectService.GetProjectManagerAsync(item.Id, item.CompanyId) is not null)
-                    {
-                        <span>@((await _projectService.GetProjectManagerAsync(item.Id, item.CompanyId))!.FullName)</span>
-                    }
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.ProjectPriority.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    @if (item.Archived)
-                    {
-                        <a asp-action="Restore" asp-route-id="@item.Id">Restore</a>
-                    }
-                    else
-                    {
-                        <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-                    }
-                    <a asp-action="AssignPM" asp-route-id="@item.Id">Assign PM</a>
-                    <a asp-action="EditMembers" asp-route-id="@item.Id">Edit Members</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }
