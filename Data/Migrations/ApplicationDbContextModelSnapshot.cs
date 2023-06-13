@@ -177,7 +177,6 @@ namespace BugTracker.Data.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("InviteeId")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("InviteeLastName")
@@ -732,9 +731,7 @@ namespace BugTracker.Data.Migrations
 
                     b.HasOne("BugTracker.Models.BTUser", "Invitee")
                         .WithMany()
-                        .HasForeignKey("InviteeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InviteeId");
 
                     b.HasOne("BugTracker.Models.BTUser", "Invitor")
                         .WithMany()

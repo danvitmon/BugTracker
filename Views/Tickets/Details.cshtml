@@ -1,94 +1,160 @@
-﻿@model BugTracker.Models.Ticket
+﻿@using BugTracker.Services.Interfaces;
+@model BugTracker.Models.Ticket
+
+@inject IBTFileService _fileService
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<div class="p-3 d-flex flex-column">
-    <h1>Project Details</h1>
-    <div class="row g-3 mb-3">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex">
-                    @* PROJECT'S STATUS *@
-                    <h5>Archived / In Progress / Overdue</h5>
-                    @* ONLY SHOW THESE BUTTONS IF THEY'RE ALLOWED TO DO THESE ACTIONS *@
-                    <div class="ms-auto">
-                        <a class="btn btn-sm btn-secondary" href="#">Edit</a>
-                        <a class="btn btn-sm btn-secondary" href="#">Archive / Restore</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    @* PROJECT NAME GOES HERE *@
-                    <h5 class="card-title">Project Name</h5>
-                    <h6 class="card-subtitle mb-4 text-muted">@* Project start date and end date *@</h6>
-                    <p class="card-text">
-                        @* PROJECT DESCRIPTION GOES HERE *@
-                        Project Description
-                    </p>
-                </div>
-                <div class="card-footer fw-bold lead">
-                    Project Manager: @* Either the PM's name or "Unassigned" *@
-                </div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="row">
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100">
-                        @* DISPLAY LIST OF DEVELOPERS ON PROJECT *@
-                        <div class="card-header">
-                            Developers
-                        </div>
-                        <div class="card-body">
-                            <ul>
-                                <li>Submitters in project go here</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100">
-                        @* DISPLAY LIST OF SUBMITTERS ON PROJECT *@
-                        <div class="card-header">
-                            Submitters
-                        </div>
-                        <div class="card-body">
-                            <ul>
-                                <li>Submitters in project go here</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @*
-        @if ( Only show the "manage project members" button if they're allowed to assign members to this project )
-        {
-            <div class="col-12">
-                <div class="d-flex flex-column align-items-stretch align-items-lg-end">
-                    <a href="#" class="btn btn-secondary btn-sm">
-                        Manage Project Members
-                    </a>
-                </div>
-            </div>
-        }*@
-    </div>
-    <div class="table-responsive mt-4">
-        <table class="table table-hover table-bordered text-center no-wrap" id="ticketTable">
-            @* TICKETS TABLE *@
-            <tr>
-                <td>
-                    Project Tickets Go Here
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="mt-5 ms-auto">
-        <a asp-action="Index" class="btn btn-dark">Back to List</a>
-    </div>
-</div>
+<h1>Ticket Details</h1>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="container-fluid">
+        <div class="row gy-2">
+            <div class="col-md-12 col">
+                <div class="row col-cols-2 mt-5 bg-secondary">
+                    <div class="card col m-1 p-2">
+                        <div class="card-body">
+                            @*Title of Ticket*@
+                            <h5>@Model.Title</h5>
+                            @*Description of Ticket*@
+                            <p>@Model.Description</p>
+                            <div class="my-3">
+                                <span style="font-size:small">Project: @Model.Project.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card col m-1 p-2">
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                @*Ticket date*@
+                                <li><strong>Date Entered:</strong> <span class="">  @Model.Created</</span></li>
+                                @*Project end date*@
+                                <li><strong>Deadline:</strong> <span class="">  @Model.Project!.EndDate.Date</</span></li>
+                                @*Ticket type*@
+                                <li><strong>Type:</strong> <span class="">  @Model.TicketType.Name</span></li>
+                                @*Ticket priority*@
+                                <li><strong>Priority:</strong> <span class="">  @Model.TicketPriority.Name</span></li>
+                                @*Ticket status*@
+                                <li><strong>Status:</strong> <span class="">  @Model.TicketStatus.Name</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col col-cols-2 mt-5 ">
+                <div class="col">
+                    <div class="bg-secondary">
+                        <div class="card m-1 p-2">
+                            <div class="card-header">
+                                <h2>Comments</h2>
+                            </div>
+                            <div class="card-body" style="overflow-y:auto;height:600px;">
+
+                                <div>
+                                    <form asp-action="AddTicketComment" asp-controller="Tickets" enctype="multipart/form-data" method="post">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="@Model.Id" name="TicketId">
+                                        <div class="media-body ml-3">
+                                            <label>
+                                                Add A Comment:
+                                                <textarea id="editor" name="comment" class="form-control"></textarea>
+                                            </label><br />
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <hr />
+                                <h6>Comments</h6>
+                                <ul class="right_chat list-unstyled mb-0">
+                                    @*Loop to show comments made for the Ticket*@
+                                    @foreach (TicketComment comment in Model.Comments)
+                                    {
+                                        <li>
+                                            <h5>@comment.User!.FullName</h5>
+                                            <p>@comment.Comment</p>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="bg-secondary">
+                        <div class="card m-1 p-2">
+                            <div class="card-header">
+                                <h2>Attachments</h2>
+                            </div>
+                            <div class="card-body" style="overflow-y:auto;height:300px;">
+                                @* Refer to the Ticket Attachments document for this section *@
+                                <div class="row clearfix">
+                                    <div>
+                                        <form asp-action="AddTicketAttachment" asp-controller="Tickets" enctype="multipart/form-data" method="post">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <input type="hidden" asp-for="@Model.Id" name="TicketId">
+                                            <div class="media-body ml-3">
+                                                <label>
+                                                    Description
+                                                    <input asp-for="@Model.Attachments.FirstOrDefault().Description" type="text" class="form-control" />
+                                                </label><br />
+                                                <label class="btn btn-outline-primary btn-sm">
+                                                    <input asp-for="@Model.Attachments.FirstOrDefault().FormFile" type="file" class="form-control-file" />
+                                                </label>
+                                                <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <hr />
+                                <h6>Attachments</h6>
+                                <div class="container">
+                                    <div class="row">
+                                        @foreach (TicketAttachment item in Model.Attachments)
+                                        {
+                                            <div class="col col-sm-2">
+                                                <a asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
+                                                    <div class="icon">
+                                                        <img src="@_fileService.GetFileIcon(item.FileName)" style="height:50px;width:50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.FileName" />
+                                                    </div>
+                                                </a>
+                                                <div style="font-size:x-small">
+                                                    <div class="file-name">
+                                                        <strong>@item.Description</strong>
+                                                    </div>
+                                                    <small>Size: @_fileService.FormatFileSize(item.FileData.Length) </small>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col mt-5 ">
+                <div class="bg-dark">
+                    <div class="card m-1 p-2">
+                        <div class="card-header">
+                            <h2>History</h2>
+                            <hr />
+                        </div>
+                        <div class="card-body" style="overflow-y:auto;height:1000px;background-color:antiquewhite">
+                            @*Loop to show the history entries for the Ticket*@
+                            @foreach (TicketHistory history in Model.History)
+                            {
+                                <h5>@history.PropertyName</h5>
+                                <p>@history.Description</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

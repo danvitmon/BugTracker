@@ -23,7 +23,6 @@ namespace BugTracker.Models
         [Required]
         public string? InvitorId { get; set; }
 
-        [Required]
         public string? InviteeId { get; set; }
 
         [Required]

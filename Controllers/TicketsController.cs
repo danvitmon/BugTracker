@@ -26,16 +26,22 @@ namespace BugTracker.Controllers
         private readonly IBTTicketService _ticketService;
         private readonly IBTProjectService _projectService;
         private readonly IBTFileService _fileService;
+        private readonly IBTCompanyService _companyService;
+        private readonly IBTTicketHistoryService _ticketHistoryService;
 
         public TicketsController(UserManager<BTUser> userManager,
                                  IBTTicketService ticketService,
                                  IBTProjectService projectService,
-                                 IBTFileService fileService)
+                                 IBTFileService fileService,
+                                 IBTCompanyService companyService,
+                                 IBTTicketHistoryService ticketHistoryService)
         {
             _userManager = userManager;
             _ticketService = ticketService;
             _projectService = projectService;
             _fileService = fileService;
+            _companyService = companyService;
+            _ticketHistoryService = ticketHistoryService;
         }
 
         // GET: Tickets
@@ -140,38 +146,30 @@ namespace BugTracker.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId,DeveloperUserId")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
         {
-            ModelState.Remove("SubmitterUserId");
+            ModelState.Remove(nameof(Ticket.SubmitterUserId));
 
             if (ModelState.IsValid)
             {
-                ticket.Created = DateTime.UtcNow;
+                int companyId = User.Identity!.GetCompanyId();
 
+                ticket.Created = DateTime.UtcNow;
                 ticket.SubmitterUserId = _userManager.GetUserId(User);
 
-                var statuses = await _ticketService.GetTicketStatuses();
-
-                foreach (TicketStatus ts in statuses)
-                {
-                    if (ts.Name == nameof(BTTicketStatuses.New))
-                    {
-                        ticket.TicketStatusId = ts.Id;
-                        break;
-                    }
-                }
-
                 await _ticketService.AddTicketAsync(ticket);
+
+                await _ticketHistoryService.AddHistoryAsync(null, ticket, _userManager.GetUserId(User)!);
+
                 return RedirectToAction(nameof(Index));
             }
 
-            var projects = await _projectService.GetProjectsByCompanyIdAsync(User.Identity!.GetCompanyId());
-            var priorities = await _ticketService.GetTicketPriorities();
-            var types = await _ticketService.GetTicketTypes();
+
+            List<Project> projects = await _projectService.GetProjectsByCompanyIdAsync(User.Identity!.GetCompanyId());
 
             ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
-            ViewData["TicketPriorityId"] = new SelectList(priorities, "Id", "Name");
-            ViewData["TicketTypeId"] = new SelectList(types, "Id", "Name");
+            ViewData["TicketPriorityId"] = new SelectList(await _ticketService.GetTicketPriorities(), "Id", "Name");
+            ViewData["TicketTypeId"] = new SelectList(await _ticketService.GetTicketTypes(), "Id", "Name");
             return View(ticket);
         }
 
@@ -216,10 +214,13 @@ namespace BugTracker.Controllers
             {
                 try
                 {
-                    ticket.Created = DateTime.SpecifyKind(ticket.Created, DateTimeKind.Utc);
-                    ticket.Updated = DateTime.UtcNow;
+                    Ticket? oldTicket = await _ticketService.GetTicketAsNoTrackingAsync(ticket.Id, User.Identity!.GetCompanyId());
+                    ticket.Created = DateTime.UtcNow;
 
                     await _ticketService.UpdateTicketAsync(ticket, User.Identity!.GetCompanyId());
+                    ticket = (await _ticketService.GetTicketByIdAsync(ticket.Id, User.Identity!.GetCompanyId()))!;
+
+                    await _ticketHistoryService.AddHistoryAsync(oldTicket, ticket, _userManager.GetUserId(User)!);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -349,6 +350,8 @@ namespace BugTracker.Controllers
 
                 await _ticketService.AddTicketAttachmentAsync(ticketAttachment);
                 statusMessage = "Success: New attachment added to Ticket.";
+
+                await _ticketHistoryService.AddHistoryAsync(ticketAttachment.TicketId, nameof(TicketAttachment), ticketAttachment.BTUserId!);
             }
             else
             {
@@ -373,27 +376,32 @@ namespace BugTracker.Controllers
             return File(fileData, $"application/{ext}");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddTicketComment([Bind("Id,Comment,TicketId")] TicketComment ticketComment)
+        public async Task<IActionResult> AddTicketComment(TicketComment? ticketComment)
         {
-            string statusMessage;
-            ModelState.Remove("UserId");
-
-            if (ModelState.IsValid)
+            if (ticketComment is not null && ticketComment.TicketId is not 0 && !string.IsNullOrEmpty(ticketComment.Comment))
             {
-                ticketComment.UserId = _userManager.GetUserId(User);
-                ticketComment.Created = DateTime.UtcNow;
+                Ticket? ticket = await _ticketService.GetTicketByIdAsync(ticketComment.TicketId, User.Identity!.GetCompanyId());
+                if (ticket is null) return NotFound();
 
-                await _ticketService.AddTicketCommentAsync(ticketComment);
-                statusMessage = "Success: New attachment added to Ticket.";
-            }
-            else
-            {
-                statusMessage = "Error: Invalid data.";
-            }
+                string userId = _userManager.GetUserId(User);
 
-            return RedirectToAction("Details", new { id = ticketComment.TicketId, message = statusMessage });
+                if (User.IsInRole(nameof(BTRoles.Admin))
+                    || (User.IsInRole(nameof(BTRoles.ProjectManager)) && ticket.Project?.Members.Any(m => m.Id == userId) == true)
+                    || ticket.DeveloperUserId == userId
+                    || ticket.SubmitterUserId == userId)
+                {
+                    ticketComment.Created = DateTime.UtcNow;
+                    ticketComment.UserId = userId;
+
+                    await _ticketService.AddTicketCommentAsync(ticketComment);
+
+                    await _ticketHistoryService.AddHistoryAsync(ticketComment.TicketId, nameof(TicketComment), ticketComment.UserId!);
+                }
+
+                return RedirectToAction(nameof(Details), new { id = ticket.Id });
+            }
+            
+            return BadRequest();
         }
     }
 }
