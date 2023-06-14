@@ -1,432 +1,281 @@
-﻿﻿@using BugTracker.Models.Enums;
-@using BugTracker.Services.Interfaces;
-@model IEnumerable<BugTracker.Models.Ticket>
+﻿@model IEnumerable<BugTracker.Models.Ticket>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "All Tickets";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<div b-x2sslo1ids="" class="wrapper">
-    <div b-x2sslo1ids="" class="wrapper-box">
-        @*<!-- BEGIN: Side Menu -->
-        <nav b-x2sslo1ids="" class="side-nav">
-            <ul b-x2sslo1ids="">
-                <li b-x2sslo1ids="">
-                    <a class="side-menu" href="/Home/Dashboard">
-                        <div b-x2sslo1ids="" class="side-menu__icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home" b-x2sslo1ids=""><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> </div>
-                        <div b-x2sslo1ids="" class="side-menu__title"> Dashboard </div>
-                    </a>
-                </li>
-                <li b-x2sslo1ids="">
-                    <a class="side-menu" href="/Company">
-                        <div b-x2sslo1ids="" class="side-menu__icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box" b-x2sslo1ids=""><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> </div>
-                        <div b-x2sslo1ids="" class="side-menu__title"> Company </div>
-                    </a>
-                </li>
-                <li b-x2sslo1ids="">
-                    <a class="side-menu" href="/Projects">
-                        <div b-x2sslo1ids="" class="side-menu__icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers" b-x2sslo1ids=""><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> </div>
-                        <div b-x2sslo1ids="" class="side-menu__title"> Projects </div>
-                    </a>
-                </li>
-
-                <li b-x2sslo1ids="">
-                    <a class="side-menu" href="/Tickets">
-                        <div b-x2sslo1ids="" class="side-menu__icon"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag" b-x2sslo1ids=""><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg> </div>
-                        <div b-x2sslo1ids="" class="side-menu__title"> Tickets </div>
-                    </a>
-                </li>
-            </ul>
-        </nav>*@
-        <!-- END: Side Menu -->
-        <!-- BEGIN: Content -->
-        <div b-x2sslo1ids="" class="content">
-
-
-
-
-
-            <div class="intro-y d-block d-sm-flex align-items-center h-10 mt-8">
-                <h2 class="fs-lg fw-medium truncate me-5">
-                    Tickets
-                </h2>
-                <div class="d-flex align-items-center ms-sm-auto mt-3 mt-sm-0">
-                    <a class="btn btn-primary d-flex align-items-center me-2" href="/Tickets/Create"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle w-5 h-5 me-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg> New Ticket </a>
-                    <div class="dropdown">
-                        <button class="dropdown-toggle btn btn-outline-primary shadow-md" aria-expanded="false" data-bs-toggle="dropdown"> Current Tickets <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down w-4 h-4 ms-2"><polyline points="6 9 12 15 18 9"></polyline></svg> </button>
-                        <div class="dropdown-menu w-48">
-                            <ul class="dropdown-content">
-                                <li>
-                                    <a class="dropdown-item" href="/Tickets/UnassignedTickets"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg> Unassigned</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/Tickets/Archived"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-2"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> Archived </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="/Tickets/AllTickets"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers w-4 h-4 me-2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg> All </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="intro-y overflow-auto overflow-lg-visible mt-5">
-                <div id="ticketsTable_wrapper" class="dataTables_wrapper no-footer">
-                    <div class="dataTables_length" id="ticketsTable_length"><label>Show <select name="ticketsTable_length" aria-controls="ticketsTable" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div><div id="ticketsTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="ticketsTable"></label></div><table id="ticketsTable" class="table table-report mt-sm-2 dataTable no-footer" aria-describedby="ticketsTable_info">
-                        <thead>
-                            <tr><th class="text-nowrap sorting sorting_asc" tabindex="0" aria-controls="ticketsTable" rowspan="1" colspan="1" style="width: 0px;" aria-sort="ascending" aria-label=": activate to sort column descending"></th><th class="text-center text-nowrap sorting" tabindex="0" aria-controls="ticketsTable" rowspan="1" colspan="1" style="width: 0px;" aria-label="TYPE: activate to sort column ascending">TYPE</th><th class="text-center text-nowrap sorting" tabindex="0" aria-controls="ticketsTable" rowspan="1" colspan="1" style="width: 0px;" aria-label="STATUS: activate to sort column ascending">STATUS</th><th class="text-center text-nowrap sorting" tabindex="0" aria-controls="ticketsTable" rowspan="1" colspan="1" style="width: 0px;" aria-label="PRIORITY: activate to sort column ascending">PRIORITY</th><th class="text-center text-nowrap sorting" tabindex="0" aria-controls="ticketsTable" rowspan="1" colspan="1" style="width: 0px;" aria-label="SUBMITTED: activate to sort column ascending">SUBMITTED</th><th class="text-center text-nowrap sorting" tabindex="0" aria-controls="ticketsTable" rowspan="1" colspan="1" style="width: 0px;" aria-label=": activate to sort column ascending"></th></tr>
-                        </thead>
-                        <tbody>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            <tr class="intro-x odd">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 1</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/26"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/26"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/26"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x even">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 10</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/35"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/35"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/35"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x odd">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 11</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/36"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/36"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/36"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x even">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 12</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/37"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/37"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/37"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x odd">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 13</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/38"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/38"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/38"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x even">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 14</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/39"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/39"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/39"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x odd">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 15</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/40"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/40"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/40"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x even">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 16</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/41"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/41"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/41"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x odd">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 17</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/42"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/42"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/42"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr class="intro-x even">
-                                <td class="sorting_1">
-                                    <div class="d-flex align-content-center">
-                                        <div class="w-10 h-10 image-fit zoom-in">
-                                            <img alt="Submitter Profile Image" class="tooltip rounded-circle" src="/img/DefaultUser.png">
-                                            <span class="d-none">Bill</span>
-                                        </div>
-                                        <div class="ms-3">
-                                            <a href="" class="fw-medium text-nowrap">Bug Tracker Ticket 18</a>
-                                            <div class="text-gray-600 fs-xs text-nowrap mt-0.5">Build an Issue Tracking Web Application</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-center">NewDevelopment</td>
-                                <td class="text-center text-theme-17 fw-medium">New</td>
-                                <td>
-                                    <div class="d-flex align-items-center justify-content-center text-theme-24"> High </div>
-                                </td>
-                                <td>Jun 08, 2023</td>
-                                <td class="table-report__action w-56">
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <a class="d-flex align-items-center me-1 btn btn-primary w-24" href="/Tickets/AssignDeveloper/43"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus w-4 h-4 me-2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg> Assign </a>
-                                        <a class="d-flex align-items-center btn btn-outline-danger p-3 me-1" style="border: 0px;" href="/Tickets/Archive/43"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-archive w-4 h-4 me-1"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg> </a>
-                                        <a class="d-flex align-items-center btn btn-secondary text-theme-17 w-24" href="/Tickets/Details/43"> Details </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table><div class="dataTables_info" id="ticketsTable_info" role="status" aria-live="polite">Showing 1 to 10 of 58 entries</div><div class="dataTables_paginate paging_simple_numbers" id="ticketsTable_paginate"><a class="paginate_button previous disabled" aria-controls="ticketsTable" aria-disabled="true" aria-role="link" data-dt-idx="previous" tabindex="-1" id="ticketsTable_previous">Previous</a><span><a class="paginate_button current" aria-controls="ticketsTable" aria-role="link" aria-current="page" data-dt-idx="0" tabindex="0">1</a><a class="paginate_button " aria-controls="ticketsTable" aria-role="link" data-dt-idx="1" tabindex="0">2</a><a class="paginate_button " aria-controls="ticketsTable" aria-role="link" data-dt-idx="2" tabindex="0">3</a><a class="paginate_button " aria-controls="ticketsTable" aria-role="link" data-dt-idx="3" tabindex="0">4</a><a class="paginate_button " aria-controls="ticketsTable" aria-role="link" data-dt-idx="4" tabindex="0">5</a><a class="paginate_button " aria-controls="ticketsTable" aria-role="link" data-dt-idx="5" tabindex="0">6</a></span><a class="paginate_button next" aria-controls="ticketsTable" aria-role="link" data-dt-idx="next" tabindex="0" id="ticketsTable_next">Next</a></div>
-                </div>
-            </div>
-
-
-        </div>
-        <!-- END: Content -->
-    </div>
+<div class="row">
+	<h2 class="m-t-0 h3"><b>All Tickets </b></h2>
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="row justify-content-between">
+					<div class="col-md-4">
+						<div class="mt-3 mt-md-0">
+							<a data-bs-toggle="modal" data-bs-target="#TicketsCreate" class="btn btn-success width-lg w-md waves-effect waves-light"><i class="mdi mdi-plus"></i> Create Ticket</a>
+						</div>
+					</div><!-- end col-->
+				</div> <!-- end row -->
+			</div>
+		</div> <!-- end card -->
+	</div><!-- end col-->
 </div>
-            @*<td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Archive" asp-route-id="@item.Id">Archive</a>
-            </td>*@
-        </tr>
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+
+				<table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>ID</th>
+							<th>Description</th>
+							<th>Project</th>
+							<th>Developer</th>
+							<th>Priority</th>
+							<th>Status</th>
+							<th>Type</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						@foreach (Ticket ticket in Model)
+						{
+							<tr>
+								<td>
+									<a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a>
+								</td>
+								<td>@ticket.Id</td>
+								<td>@ticket.Description</td>
+								<td>
+									<a asp-controller="Projects" asp-action="Details" asp-route-id="@ticket.Project.Id">@ticket.Project!.Name</a>
+								</td>
+								<td>
+									@if (ticket.DeveloperUser == null)
+									{
+										<span style="color:red">Unassigned</span>
+
+									}
+									else
+									{
+										@ticket.DeveloperUser.FullName
+										;
+									}
+								</td>
+								@*Priority*@
+								<td>
+									@if (ticket.TicketPriority!.Name == "Urgent")
+									{
+										<h5 style="color:firebrick">Urgent</h5>
+									}
+									else if (ticket.TicketPriority!.Name == "High")
+									{
+										<h5 style="color:orangered">High</h5>
+
+									}
+									else if (ticket.TicketPriority!.Name == "Medium")
+									{
+										<h5 style="color:darkslateblue">Medium</h5>
+									}
+									else if (ticket.TicketPriority!.Name == "Low")
+									{
+										<h5 style="color:forestgreen">Low</h5>
+									}
+
+								</td>
+								@*Status*@
+								<td>
+									@if (ticket.TicketStatus!.Name == "New")
+									{
+										<h5 class="badge bg-success">New Ticket</h5>
+									}
+									else if (ticket.TicketStatus!.Name == "Development")
+									{
+										<h5 class="badge bg-info">In Development</h5>
+									}
+									else if (ticket.TicketStatus!.Name == "Testing")
+									{
+										<h5 class="badge bg-warning">In Testing</h5>
+									}
+									else if (ticket.TicketStatus!.Name == "Resolved")
+									{
+										<h5 class="badge bg-secondary">Resolved</h5>
+									}
+								</td>
+								@*Type*@
+								<td>
+									@if (ticket.TicketType!.Name == "NewDevelopment")
+									{
+										<h5 class="badge bg-pink">New Development</h5>
+									}
+									else if (ticket.TicketType!.Name == "WorkTask")
+									{
+										<h5 class="badge bg-primary">Work Task</h5>
+									}
+									else if (ticket.TicketType!.Name == "Defect")
+									{
+										<h5 class="badge bg-danger">Defect</h5>
+									}
+									else if (ticket.TicketType!.Name == "ChangeRequest")
+									{
+										<h5 class="badge bg-info">Change Request</h5>
+									}
+									else if (ticket.TicketType!.Name == "Enhancement")
+									{
+										<h5 class="badge bg-success">Enhancement</h5>
+									}
+									else if (ticket.TicketType!.Name == "GeneralTask")
+									{
+										<h5 class="badge bg-light">General Task</h5>
+									}
+								</td>
+								<td class="d-flex justify-content-between">
+									<a asp-action="Edit" asp-controller="Tickets" asp-route-id="@ticket.Id" type="button" data-bs-toggle="modal" data-bs-target="#TicketsEdit" class="btn btn-soft-success waves-effect waves-light">Edit</a>
+									<a asp-action="Archive" asp-controller="Tickets" asp-route-id="@ticket.Id" type="button" class="btn btn-soft-dark waves-effect waves-light">Archive</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div> <!-- end row -->
+@section Scripts{
+	<script>
+		$('#datatable').DataTable();
+	</script>
+	}
+
+<!-- Button trigger modal -->
+@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TicketsEdit">
+	Launch static backdrop modal
+	</button>*@
+
+<!-- Modal -->
+@foreach (Ticket ticket in Model)
+{
+	<div class="modal fade" id="TicketsEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="staticBackdropLabel">Edit Ticket</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form asp-action="Edit" asp-controller="Tickets" method="post">
+						<input type="hidden" asp-for="@ticket.Id" />
+						<input type="hidden" asp-for="@ticket.Created" />
+						<input type="hidden" asp-for="@ticket.SubmitterUserId" />
+						<input type="hidden" asp-for="@ticket.DeveloperUserId" />
+						<input type="hidden" asp-for="@ticket.ProjectId" />
+						<input type="hidden" asp-for="@ticket.Archived" />
+						<input type="hidden" asp-for="@ticket.ArchivedByProject" />
+						<div class="row g-3 p-2">
+							<div class="col-12 d-flex justify-content-center">
+								<div class="row">
+									<div class="col-12">
+										<label asp-for="@ticket.Title" class="control-label"></label>
+										<input asp-for="@ticket.Title" class="form-control" />
+										<span asp-validation-for="@ticket.Title" class="text-danger"></span>
+									</div>
+									<div class="col-12">
+										<label asp-for="@ticket.Description" class="control-label"></label>
+										<input asp-for="@ticket.Description" class="form-control" />
+										<span asp-validation-for="@ticket.Description" class="text-danger"></span>
+									</div>
+									<div class="col-12 mt-2">
+										<label asp-for="@ticket.TicketTypeId" class="control-label"></label>
+										<select asp-for="@ticket.TicketTypeId" class="form-control" asp-items="@ViewBag.TicketTypeId"></select>
+										<span asp-validation-for="@ticket.TicketTypeId" class="text-danger"></span>
+									</div>
+									<div class="col-12 mt-2">
+										<label asp-for="@ticket.TicketStatusId" class="control-label"></label>
+										<select asp-for="@ticket.TicketStatusId" class="form-control" asp-items="@ViewBag.TicketStatusId"></select>
+										<span asp-validation-for="@ticket.TicketStatusId" class="text-danger"></span>
+									</div>
+									<div class="col-12 mt-2">
+										<label asp-for="@ticket.TicketPriorityId" class="control-label"></label>
+										<select asp-for="@ticket.TicketPriorityId" class="form-control" asp-items="@ViewBag.TicketPriorityId"></select>
+										<span asp-validation-for="@ticket.TicketPriorityId" class="text-danger"></span>
+									</div>
+									<div class="modal-footer">
+										<a type="submit" class="btn btn-success my-3">Save</a>
+										<a data-bs-dismiss="modal" class="btn btn-secondary">Cancel</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Button trigger modal -->
+	@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#TicketsCreate">
+	Launch static backdrop modal
+	</button>*@
+
+	<!-- Create Ticket Modal -->
+	<div class="modal fade" id="TicketsCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="TicketsCreateLabel">Create New Ticket</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form asp-action="Create">
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<div class="form-group">
+							<label asp-for="@ticket.Title" class="control-label"></label>
+							<input asp-for="@ticket.Title" class="form-control" />
+							<span asp-validation-for="@ticket.Title" class="text-danger"></span>
+						</div>
+						<div class="form-group">
+							<label asp-for="@ticket.Description" class="control-label"></label>
+							<input asp-for="@ticket.Description" class="form-control" />
+							<span asp-validation-for="@ticket.Description" class="text-danger"></span>
+						</div>
+						<div class="form-group">
+							<label asp-for="@ticket.ProjectId" class="control-label"></label>
+							<select asp-for="@ticket.ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+						</div>
+						<div class="form-group">
+							<label asp-for="@ticket.TicketTypeId" class="control-label"></label>
+							<select asp-for="@ticket.TicketTypeId" class="form-control" asp-items="ViewBag.TicketTypeId"></select>
+						</div>
+						@*            <div class="form-group">
+					<label asp-for="TicketStatusId" class="control-label"></label>
+					<select asp-for="TicketStatusId" class ="form-control" asp-items="ViewBag.TicketStatusId"></select>
+					</div>*@
+						<div class="form-group">
+							<label asp-for="@ticket.TicketPriorityId" class="control-label"></label>
+							<select asp-for="@ticket.TicketPriorityId" class="form-control" asp-items="ViewBag.TicketPriorityId"></select>
+						</div>
+						@*<div class="form-group">
+					<label asp-for="DeveloperUserId" class="control-label"></label>
+					<select asp-for="DeveloperUserId" class ="form-control" asp-items="ViewBag.DeveloperUserId"></select>
+					</div>
+					<div class="form-group">
+					<label asp-for="SubmitterUserId" class="control-label"></label>
+					<select asp-for="SubmitterUserId" class ="form-control" asp-items="ViewBag.SubmitterUserId"></select>
+					</div>*@
+						<div class="modal-footer">
+							<input type="submit" value="Create" class="btn btn-success" />
+							<input type="submit" value="Close" asp-action="Index" data-bs-dismiss="modal" class="btn btn-secondary" />
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- END Create Ticket Modal -->
 }
-    </tbody>
-</table>

@@ -364,29 +364,26 @@ namespace BugTracker.Services
             }
         }
 
-        //public Task<List<Project>> GetAllProjectsByCompanyIdAsync(int companyId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<List<Project>> GetUnassignedProjectsByCompanyIdAsync(int companyId)
+        {
+            try
+            {
+                List<Project> allProjects = await GetProjectsByCompanyIdAsync(companyId);
+                List<Project> unassignedProjects = new();
 
-        //public Task<List<Project>> GetAllProjectsByPriorityAsync(int companyId, string priority)
-        //{
-        //    throw new NotImplementedException();
-        //}
+                foreach (Project project in allProjects)
+                {
+                    BTUser? projectManager = await GetProjectManagerAsync(project.Id, companyId);
+                    if (projectManager is null) unassignedProjects.Add(project);
+                }
 
-        //public Task<List<Project>> GetAllUserProjectsAsync(string userId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+                return unassignedProjects;
+            }
+            catch (Exception)
+            {
 
-        //public Task<List<Project>> GetArchivedProjectsByCompanyIdAsync(int companyId)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        //public Task<List<Project>> GetUnassignedProjectsByCompanyIdAsync(int companyId)
-        //{
-        //    throw new NotImplementedException();
-        //}
+                throw;
+            }
+        }
     }
 }

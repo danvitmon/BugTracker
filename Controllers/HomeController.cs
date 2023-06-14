@@ -13,12 +13,17 @@ namespace BugTracker.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Dashboard()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Landing()
+        {
+            return View();
+        }
+
+        public IActionResult Index()
         {
             return View();
         }

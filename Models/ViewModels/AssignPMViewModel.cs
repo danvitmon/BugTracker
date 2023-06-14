@@ -7,5 +7,6 @@ namespace BugTracker.Models.ViewModels
         public Project? Project { get; set; }
         public SelectList? PMList { get; set; }
         public string? PMId { get; set; }
+        public string? MemberId { get; set; }
     }
 }
