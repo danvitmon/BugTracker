@@ -1,9 +1,12 @@
-﻿using BugTracker.Models;
+﻿using BugTracker.Extensions;
+using BugTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,11 +18,15 @@ namespace BugTracker.Controllers
 
         public IActionResult Dashboard()
         {
+            //int companyId = User.Identity!.GetCompanyId();
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Landing()
         {
+            //int companyId = User.Identity!.GetCompanyId();
+
             return View();
         }
 
