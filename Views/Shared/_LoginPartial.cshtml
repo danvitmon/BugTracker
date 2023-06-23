@@ -2,6 +2,10 @@
 @inject SignInManager<BTUser> SignInManager
 @inject UserManager<BTUser> UserManager
 
+@{
+	BTUser? user = await UserManager.GetUserAsync(User);
+}
+
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 	{
@@ -20,7 +24,7 @@
 				</div>
 
 				<!-- item-->
-				<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name!
+				<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@user?.FullName
 					@*<i class="fe-user"></i>*@
 				</a>
 
@@ -42,9 +46,10 @@
             <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
         </form>
     </li>*@
-}
-else
+	}
+	else
 	{
+		
 		<li class="dropdown notification-list topbar-dropdown">
 			<a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
 				@*<img src="assets/images/users/user-1.jpg" alt="user-image" class="rounded-circle">*@
@@ -68,6 +73,7 @@ else
 				<a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
 
 			</div>
-		</li>
+		</li>	
+		
 }
 </ul>

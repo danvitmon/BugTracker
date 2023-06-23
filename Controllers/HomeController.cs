@@ -1,5 +1,7 @@
 ﻿using BugTracker.Extensions;
 using BugTracker.Models;
+using BugTracker.Models.ViewModels;
+using BugTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,22 +12,33 @@ namespace BugTracker.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+		private readonly IBTProjectService _projectService;
+		private readonly IBTTicketService _ticketService;
+		private readonly IBTCompanyService _companyService;
+		private readonly IBTRolesService _roleService;
+		private readonly IBTFileService _fileService;
 
-        public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, IBTProjectService projectService, IBTTicketService ticketService, IBTCompanyService companyService, IBTRolesService roleService, IBTFileService fileService)
         {
             _logger = logger;
-        }
+			_projectService = projectService;
+			_ticketService = ticketService;
+			_companyService = companyService;
+			_roleService = roleService;
+			_fileService = fileService;
+		}
 
         public IActionResult Dashboard()
         {
-            //int companyId = User.Identity!.GetCompanyId();
+            DashboardViewModel viewmodel = new DashboardViewModel();
+            int? companyId = User.Identity!.GetCompanyId();
+
             return View();
         }
 
         [AllowAnonymous]
         public IActionResult Landing()
         {
-            //int companyId = User.Identity!.GetCompanyId();
 
             return View();
         }
