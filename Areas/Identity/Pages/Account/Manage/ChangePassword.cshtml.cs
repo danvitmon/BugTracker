@@ -1,26 +1,32 @@
-﻿#nullable disable
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+#nullable disable
 
+using System;
 using System.ComponentModel.DataAnnotations;
-
+using System.Threading.Tasks;
+using BugTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-using BugTracker.Models;
+using Microsoft.Extensions.Logging;
 
 namespace BugTracker.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<BTUser>          _userManager;
-        private readonly SignInManager<BTUser>        _signInManager;
+        private readonly UserManager<BTUser> _userManager;
+        private readonly SignInManager<BTUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
-        public ChangePasswordModel(UserManager<BTUser> userManager,SignInManager<BTUser> signInManager,ILogger<ChangePasswordModel> logger)
+        public ChangePasswordModel(
+            UserManager<BTUser> userManager,
+            SignInManager<BTUser> signInManager,
+            ILogger<ChangePasswordModel> logger)
         {
-            _userManager   = userManager;
+            _userManager = userManager;
             _signInManager = signInManager;
-            _logger        = logger;
+            _logger = logger;
         }
 
         /// <summary>
@@ -109,7 +115,6 @@ namespace BugTracker.Areas.Identity.Pages.Account.Manage
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-
                 return Page();
             }
 
