@@ -1,7 +1,5 @@
 @keyframes bounceOutUp {
-  20% {
-    transform: translate3d(0, -10px, 0) scaleY(0.985);
-  }
+  20% { transform: translate3d(0, -10px, 0) scaleY(0.985); }
 
   40%,
   45% {
@@ -15,6 +13,4 @@
   }
 }
 
-.bounceOutUp {
-  animation-name: bounceOutUp;
-}
+.bounceOutUp { animation-name: bounceOutUp; }

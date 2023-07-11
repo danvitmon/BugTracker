@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <version>1.0.0</version>
@@ -12,16 +13,18 @@
     <id>toastr</id>
     <title>toastr</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>3 Easy Steps:
+    <description>
+      3 Easy Steps:
 
-1) Link to toastr.css  and toastr-responsive.css 
-2) Link to toastr.js 
-3) Use toastr to display a toast for info, success, warning or error
+      1) Link to toastr.css  and toastr-responsive.css
+      2) Link to toastr.js
+      3) Use toastr to display a toast for info, success, warning or error
 
-// Display an info toast with no title
-toastr.info('Are you the 6 fingered man?')
+      // Display an info toast with no title
+      toastr.info('Are you the 6 fingered man?')
 
-*** For other API calls, see the demo</description>
+      *** For other API calls, see the demo
+    </description>
     <summary>toastr is a Javascript library for Gnome / Growl type non-blocking notifications. jQuery is required. The goal is to create a simple core library that can be customized and extended.</summary>
     <copyright>Copyright © 2012 Hans Fjällemark &amp; John Papa.</copyright>
     <language>en-US</language>

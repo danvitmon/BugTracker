@@ -1,53 +1,53 @@
 ﻿@model BugTracker.Models.ViewModels.AssignMemberViewModel
 
 @{
-    ViewData["Title"] = "Edit Members";
+  ViewData["Title"] = "Edit Members";
 }
 
 <div class="d-flex justify-content-center mt-5 flex-column align-items-center">
-    <h3 class="my-5">Edit Members</h3>
-    <h5>@Model.Project!.Name</h5>
-    <div class="row row-cols-2">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Add Members</div>
-                </div>
-                <div class="card-body">
-                    <form asp-action="EditMembers" method="post" class="d-flex flex-column">
-                        <input type="hidden" asp-for="Project!.Id" />
-                        <select asp-items="Model.UnassignedList" asp-for="MemberId">
-                            <option value="">Potential Members</option>
-                        </select>
-                        <button type="submit" class="btn btn-primary my-3">Add</button>
-                    </form>
-                </div>
-            </div>
+  <h3 class="my-5">Edit Members</h3>
+  <h5>@Model.Project!.Name</h5>
+  <div class="row row-cols-2">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Add Members</div>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Remove Members</div>
-                </div>
-                <div class="card-body">
-                    <form asp-action="EditMembers" method="post" class="d-flex flex-column">
-                        <input type="hidden" asp-for="Project!.Id" />
-                        <select asp-items="Model.CurrentList" asp-for="MemberId">
-                            <option value="">Current Members</option>
-                        </select>
-                        <button type="submit" class="btn btn-primary my-3">Remove</button>
-                        
-                    </form>
-                </div>
-            </div>
+        <div class="card-body">
+          <form asp-action="EditMembers" method="post" class="d-flex flex-column">
+            <input type="hidden" asp-for="Project!.Id"/>
+            <select asp-items="Model.UnassignedList" asp-for="MemberId">
+              <option value="">Potential Members</option>
+            </select>
+            <button type="submit" class="btn btn-primary my-3">Add</button>
+          </form>
         </div>
-        <a asp-action="Details" asp-route-id="@Model.Project!.Id" class="btn btn-secondary">Exit</a>
+      </div>
     </div>
-    
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Remove Members</div>
+        </div>
+        <div class="card-body">
+          <form asp-action="EditMembers" method="post" class="d-flex flex-column">
+            <input type="hidden" asp-for="Project!.Id"/>
+            <select asp-items="Model.CurrentList" asp-for="MemberId">
+              <option value="">Current Members</option>
+            </select>
+            <button type="submit" class="btn btn-primary my-3">Remove</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+    <a asp-action="Details" asp-route-id="@Model.Project!.Id" class="btn btn-secondary">Exit</a>
+  </div>
+
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+  @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+  }
 }

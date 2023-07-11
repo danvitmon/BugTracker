@@ -19,13 +19,11 @@
   }
 
   80% {
-    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
     transform: translate3d(0, 0, 0) scaleY(0.95);
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 
-  90% {
-    transform: translate3d(0, -4px, 0) scaleY(1.02);
-  }
+  90% { transform: translate3d(0, -4px, 0) scaleY(1.02); }
 }
 
 .bounce {

@@ -4,11 +4,7 @@
     visibility: visible;
   }
 
-  to {
-    transform: translate3d(0, 0, 0);
-  }
+  to { transform: translate3d(0, 0, 0); }
 }
 
-.slideInRight {
-  animation-name: slideInRight;
-}
+.slideInRight { animation-name: slideInRight; }

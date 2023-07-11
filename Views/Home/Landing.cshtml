@@ -1,298 +1,316 @@
-﻿﻿
-@{
-
-    Layout = null;
+﻿@{
+  Layout = null;
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Bug Bloodhound</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured tracker that can be used for your business needs." name="description" />
-    <meta content="Coderthemes" name="author" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="utf-8"/>
+  <title>Bug Bloodhound</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="A fully featured tracker that can be used for your business needs." name="description"/>
+  <meta content="Coderthemes" name="author"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+  <!-- App favicon -->
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="~/Landing/css/bootstrap.min.css" type="text/css">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="~/Landing/css/bootstrap.min.css" type="text/css">
 
-    <!--Material Icon -->
-    <link rel="stylesheet" type="text/css" href="~/Landing/css/materialdesignicons.min.css" />
+  <!--Material Icon -->
+  <link rel="stylesheet" type="text/css" href="~/Landing/css/materialdesignicons.min.css"/>
 
-    <!--pe-7 Icon -->
-    <link rel="stylesheet" type="text/css" href="~/Landing/css/pe-icon-7-stroke.css" />
+  <!--pe-7 Icon -->
+  <link rel="stylesheet" type="text/css" href="~/Landing/css/pe-icon-7-stroke.css"/>
 
-    <!-- Custom  sCss -->
-    <link rel="stylesheet" type="text/css" href="~/Landing/css/style.css" />
-
+  <!-- Custom  sCss -->
+  <link rel="stylesheet" type="text/css" href="~/Landing/css/style.css"/>
 
 
 </head>
 
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="58" class="scrollspy-example">
 
-    <!--Navbar Start-->
-    <nav class="navbar navbar-expand-lg fixed-top navbar-custom sticky sticky-dark" id="nav-sticky">
-        <div class="container-fluid">
-            <!-- LOGO -->
-            <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
-                <img src="~/Landing/images/BugTracker1.png" alt="" class="logo-light" height="90" />
-                <img src="~/Landing/images/BugTracker_black.png" alt="" class="logo-dark" height="18" />
+<!--Navbar Start-->
+<nav class="navbar navbar-expand-lg fixed-top navbar-custom sticky sticky-dark" id="nav-sticky">
+  <div class="container-fluid">
+    <!-- LOGO -->
+    <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
+      <img src="~/Landing/images/BugTracker1.png" alt="" class="logo-light" height="90"/>
+      <img src="~/Landing/images/BugTracker_black.png" alt="" class="logo-dark" height="18"/>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="mdi mdi-menu"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav ms-auto" id="mySidenav">
+        <li class="nav-item">
+          <a href="#home" class="nav-link active">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="#features" class="nav-link">Features</a>
+        </li>
+        <li class="nav-item">
+          <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">Demo</a>
+        </li>
+        <li class="nav-item">
+          <a href="https://danielmsportfolio.netlify.app/" class="nav-link">Portfolio</a>
+        </li>
+        <li class="nav-item">
+          <a href="https://github.com/danvitmon" class="nav-link">GitHub</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- Navbar End -->
+<!-- home start -->
+<section class="bg-home bg-gradient" id="home">
+  <div class="home-center">
+    <div class="home-desc-center">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-sm-6">
+            <div class="home-title">
+              <h5 class="mb-3 text-white-50">Discover Bug Bloodhound Today</h5>
+              <h2 class="mb-4 text-white">Organization is the key to success.</h2>
+              <p class="text-white-50 home-desc font-16 mb-5">Bug Bloodhound is a fully featured ticket tracking system designed to manage all of your company projects and team members in one place. </p>
+              <div class="watch-video mt-5">
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom me-4">Get Started <i class="mdi mdi-chevron-right ms-1"></i></a>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-5 offset-lg-1 col-sm-6">
+            <div class="home-img mo-mt-20">
+              <img src="~/Landing/images/home-img.png" alt="" class="img-fluid mx-auto d-block">
+            </div>
+          </div>
+        </div>
+        <!-- end row -->
+
+      </div>
+      <!-- end container-fluid -->
+    </div>
+  </div>
+</section>
+<!-- home end -->
+<!-- features start -->
+<section class="features" id="features">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <ul class="nav nav-pills nav-justified features-tab mb-5" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link" id="pills-code-tab" data-bs-toggle="pill" href="#pills-code" role="tab" aria-controls="pills-code" aria-selected="true">
+              <div class="clearfix">
+                <div class="features-icon float-end">
+                  <h1>
+                    <i class="pe-7s-notebook tab-icon"></i>
+                  </h1>
+                </div>
+                <div class="d-none d-lg-block me-4">
+                  <h5 class="tab-title">Quality Code</h5>
+                  <p>C# and .NET at its best.</p>
+                </div>
+              </div>
             </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="mdi mdi-menu"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav ms-auto" id="mySidenav">
-                    <li class="nav-item">
-                        <a href="#home" class="nav-link active">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#features" class="nav-link">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">Demo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="https://danielmsportfolio.netlify.app/" class="nav-link">Portfolio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="https://github.com/danvitmon" class="nav-link">GitHub</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Navbar End -->
-    <!-- home start -->
-    <section class="bg-home bg-gradient" id="home">
-        <div class="home-center">
-            <div class="home-desc-center">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6 col-sm-6">
-                            <div class="home-title">
-                                <h5 class="mb-3 text-white-50">Discover Bug Bloodhound Today</h5>
-                                <h2 class="mb-4 text-white">Organization is the key to success.</h2>
-                                <p class="text-white-50 home-desc font-16 mb-5">Bug Bloodhound is a fully featured ticket tracking system designed to manage all of your company projects and team members in one place. </p>
-                                <div class="watch-video mt-5">
-                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom me-4">Get Started <i class="mdi mdi-chevron-right ms-1"></i></a>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-lg-5 offset-lg-1 col-sm-6">
-                            <div class="home-img mo-mt-20">
-                                <img src="~/Landing/images/home-img.png" alt="" class="img-fluid mx-auto d-block">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end row -->
-
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="pills-customize-tab" data-bs-toggle="pill" href="#pills-customize" role="tab" aria-controls="pills-customize" aria-selected="false">
+              <div class="clearfix">
+                <div class="features-icon float-end">
+                  <h1>
+                    <i class="pe-7s-edit tab-icon"></i>
+                  </h1>
                 </div>
-                <!-- end container-fluid -->
-            </div>
-        </div>
-    </section>
-    <!-- home end -->
-    <!-- features start -->
-    <section class="features" id="features">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ul class="nav nav-pills nav-justified features-tab mb-5" id="pills-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-code-tab" data-bs-toggle="pill" href="#pills-code" role="tab" aria-controls="pills-code" aria-selected="true">
-                                <div class="clearfix">
-                                    <div class="features-icon float-end">
-                                        <h1><i class="pe-7s-notebook tab-icon"></i></h1>
-                                    </div>
-                                    <div class="d-none d-lg-block me-4">
-                                        <h5 class="tab-title">Quality Code</h5>
-                                        <p>C# and .NET at its best.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" id="pills-customize-tab" data-bs-toggle="pill" href="#pills-customize" role="tab" aria-controls="pills-customize" aria-selected="false">
-                                <div class="clearfix">
-                                    <div class="features-icon float-end">
-                                        <h1><i class="pe-7s-edit tab-icon"></i></h1>
-                                    </div>
-                                    <div class="d-none d-lg-block me-4">
-                                        <h5 class="tab-title">Simple to Use</h5>
-                                        <p>Streamlined Tracking.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-support-tab" data-bs-toggle="pill" href="#pills-support" role="tab" aria-controls="pills-support" aria-selected="false">
-                                <div class="features-icon float-end">
-                                    <h1><i class="pe-7s-headphones tab-icon"></i></h1>
-                                </div>
-                                <div class="d-none d-lg-block me-4">
-                                    <h5 class="tab-title">Fully Functional </h5>
-                                    <p>Efficiency Perfected.</p>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade" id="pills-code" role="tabpanel" aria-labelledby="pills-code-tab">
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div>
-                                        <img src="~/Landing/images/features-img/details1.jpg" alt="" class="img-fluid mx-auto d-block">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 offset-lg-1">
-                                    <div>
-                                        <div class="feature-icon mb-4">
-                                            <h1><i class="pe-7s-notebook text-primary"></i><h1>
-                                        </div>
-                                        <h5 class="mb-3">Quality Code</h5>
-                                        <p class="text-muted"></p>
-                                        <p class="text-muted"> </p>
-                                        <div class="row pt-4">
-                                            <div class="col-lg-6">
-                                                <div class="text-muted">
-                                                    <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Full Member Role Customization</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="text-muted">
-                                                    <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Project Optimization </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom">Learn More <i class="mdi mdi-arrow-right ms-1"></i></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <!-- end row -->
-                        </div>
-                        <div class="tab-pane fades how active" id="pills-customize" role="tabpanel" aria-labelledby="pills-customize-tab">
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div>
-                                        <img src="~/Landing/images/features-img/tickets1.jpg" alt="" class="img-fluid mx-auto d-block">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 offset-lg-1">
-                                    <div>
-                                        <div class="feature-icon mb-4">
-                                            <h1><i class="pe-7s-edit text-primary"></i></h1>
-                                        </div>
-                                        <h5 class="mb-3">Simple to Use</h5>
-                                        <p class="text-muted">Our web development application is designed with simplicity in mind, making it incredibly easy to use for developers of all skill levels. Whether you're a beginner or an experienced professional, our intuitive interface and streamlined features ensure a smooth and efficient development process.</p>
-                                        <div class="mt-4">
-                                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom">Learn More <i class="mdi mdi-arrow-right ms-1"></i></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <!-- end row -->
-                        </div>
-                        <div class="tab-pane fade" id="pills-support" role="tabpanel" aria-labelledby="pills-support-tab">
-
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-lg-4 col-sm-6">
-                                    <div>
-                                        <img src="~/Landing/images/features-img/projects1.jpg" alt="" class="img-fluid mx-auto d-block">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 offset-lg-1">
-                                    <div>
-                                        <div class="feature-icon mb-4">
-                                            <i class="pe-7s-headphones h1 text-primary"></i>
-                                        </div>
-                                        <h5 class="mb-3">Awesome Support</h5>
-                                        <p class="text-muted">From assigning members to projects, to fetching projects with speed.</p>
-                                        <p class="text-muted">My Bug Bloodhound will help you and your team trim your projects with minimal effort. </p>
-                                        <div class="row pt-4">
-                                            <div class="col-lg-6">
-                                                <div class="text-muted">
-                                                    <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Navigate Between Projects Quickly</p>
-                                                    <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Streamlined Interface</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="text-muted">
-                                                    <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Assign Members Rapidly </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom">Learn More <i class="mdi mdi-arrow-right ms-1"></i></a>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <!-- end row -->
-                        </div>
-                    </div>
-                    <!-- end tab-content -->
+                <div class="d-none d-lg-block me-4">
+                  <h5 class="tab-title">Simple to Use</h5>
+                  <p>Streamlined Tracking.</p>
                 </div>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="pills-support-tab" data-bs-toggle="pill" href="#pills-support" role="tab" aria-controls="pills-support" aria-selected="false">
+              <div class="features-icon float-end">
+                <h1>
+                  <i class="pe-7s-headphones tab-icon"></i>
+                </h1>
+              </div>
+              <div class="d-none d-lg-block me-4">
+                <h5 class="tab-title">Fully Functional </h5>
+                <p>Efficiency Perfected.</p>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade" id="pills-code" role="tabpanel" aria-labelledby="pills-code-tab">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-lg-4 col-sm-6">
+                <div>
+                  <img src="~/Landing/images/features-img/details1.jpg" alt="" class="img-fluid mx-auto d-block">
+                </div>
+              </div>
+              <div class="col-lg-6 offset-lg-1">
+                <div>
+                  <div class="feature-icon mb-4">
+                    <h1><i class="pe-7s-notebook text-primary"></i>
+                    <h1>
+                  </div>
+                  <h5 class="mb-3">Quality Code</h5>
+                  <p class="text-muted"></p>
+                  <p class="text-muted"> </p>
+                  <div class="row pt-4">
+                    <div class="col-lg-6">
+                      <div class="text-muted">
+                        <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Full Member Role Customization</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="text-muted">
+                        <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Project Optimization </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom">Learn More <i class="mdi mdi-arrow-right ms-1"></i></a>
+                  </div>
+                </div>
+
+              </div>
+
             </div>
             <!-- end row -->
-        </div>
-        <!-- end container-fluid -->
-    </section>
-    <!-- features end -->
-    <!-- footer start -->
-    <footer class="footer bg-dark">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="text-center">
-                        <div class="footer-logo mb-3">
-                            <img src="images/logo-light.png" alt="" height="20">
-                        </div>
-                        <ul class="list-inline footer-list text-center mt-5">
-                            <li class="list-inline-item"><a href="#">Home</a></li>
-                            <li class="list-inline-item"><a href="https://danielmsportfolio.netlify.app/">Portfolio</a></li>
-                            <li class="list-inline-item"><a href="https://github.com/danvitmon">Github</a></li>
-                        </ul>
-                        <ul class="list-inline social-links mb-4 mt-5">
-                            <li class="list-inline-item"><a href="https://instagram.com/donmonfon"><i class="mdi mdi-instagram"></i></a></li>
-                        </ul>
-                        <p class="text-white-50 mb-4">2023 © Design by <a href="https://danielmsportfolio.netlify.app/" target="_blank" class="text-white-50">Daniel Monastirsky</a> </p>
-
-                    </div>
+          </div>
+          <div class="tab-pane fades how active" id="pills-customize" role="tabpanel" aria-labelledby="pills-customize-tab">
+            <div class="row align-items-center justify-content-center">
+              <div class="col-lg-4 col-sm-6">
+                <div>
+                  <img src="~/Landing/images/features-img/tickets1.jpg" alt="" class="img-fluid mx-auto d-block">
+                </div>
+              </div>
+              <div class="col-lg-6 offset-lg-1">
+                <div>
+                  <div class="feature-icon mb-4">
+                    <h1>
+                      <i class="pe-7s-edit text-primary"></i>
+                    </h1>
+                  </div>
+                  <h5 class="mb-3">Simple to Use</h5>
+                  <p class="text-muted">Our web development application is designed with simplicity in mind, making it incredibly easy to use for developers of all skill levels. Whether you're a beginner or an experienced professional, our intuitive interface and streamlined features ensure a smooth and efficient development process.</p>
+                  <div class="mt-4">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom">Learn More <i class="mdi mdi-arrow-right ms-1"></i></a>
+                  </div>
                 </div>
 
+              </div>
             </div>
+            <!-- end row -->
+          </div>
+          <div class="tab-pane fade" id="pills-support" role="tabpanel" aria-labelledby="pills-support-tab">
+
+            <div class="row align-items-center justify-content-center">
+              <div class="col-lg-4 col-sm-6">
+                <div>
+                  <img src="~/Landing/images/features-img/projects1.jpg" alt="" class="img-fluid mx-auto d-block">
+                </div>
+              </div>
+              <div class="col-lg-6 offset-lg-1">
+                <div>
+                  <div class="feature-icon mb-4">
+                    <i class="pe-7s-headphones h1 text-primary"></i>
+                  </div>
+                  <h5 class="mb-3">Awesome Support</h5>
+                  <p class="text-muted">From assigning members to projects, to fetching projects with speed.</p>
+                  <p class="text-muted">My Bug Bloodhound will help you and your team trim your projects with minimal effort. </p>
+                  <div class="row pt-4">
+                    <div class="col-lg-6">
+                      <div class="text-muted">
+                        <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Navigate Between Projects Quickly</p>
+                        <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Streamlined Interface</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="text-muted">
+                        <p><i class="mdi mdi-checkbox-marked-outline text-primary me-2 h6"></i> Assign Members Rapidly </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-4">
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-custom">Learn More <i class="mdi mdi-arrow-right ms-1"></i></a>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <!-- end row -->
+          </div>
+        </div>
+        <!-- end tab-content -->
+      </div>
+    </div>
+    <!-- end row -->
+  </div>
+  <!-- end container-fluid -->
+</section>
+<!-- features end -->
+<!-- footer start -->
+<footer class="footer bg-dark">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="text-center">
+          <div class="footer-logo mb-3">
+            <img src="images/logo-light.png" alt="" height="20">
+          </div>
+          <ul class="list-inline footer-list text-center mt-5">
+            <li class="list-inline-item">
+              <a href="#">Home</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://danielmsportfolio.netlify.app/">Portfolio</a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://github.com/danvitmon">Github</a>
+            </li>
+          </ul>
+          <ul class="list-inline social-links mb-4 mt-5">
+            <li class="list-inline-item">
+              <a href="https://instagram.com/donmonfon">
+                <i class="mdi mdi-instagram"></i>
+              </a>
+            </li>
+          </ul>
+          <p class="text-white-50 mb-4">2023 © Design by <a href="https://danielmsportfolio.netlify.app/" target="_blank" class="text-white-50">Daniel Monastirsky</a> </p>
 
         </div>
-    </footer>
-    <!-- footer end -->
-    <!-- Back to top -->
-    <a href="#" class="back-to-top" id="back-to-top"> <i class="mdi mdi-chevron-up"> </i> </a>
+      </div>
 
-    <!-- javascript -->
-    <script src="~/Landing/js/bootstrap.bundle.min.js"></script>
-    <!-- counter js -->
-    <script src="~/Landing/js/counter.int.js"></script>
-    <!-- custom js -->
-    <script src="~/Landing/js/app.js"></script>
+    </div>
+
+  </div>
+</footer>
+<!-- footer end -->
+<!-- Back to top -->
+<a href="#" class="back-to-top" id="back-to-top">
+  <i class="mdi mdi-chevron-up"> </i>
+</a>
+
+<!-- javascript -->
+<script src="~/Landing/js/bootstrap.bundle.min.js"></script>
+<!-- counter js -->
+<script src="~/Landing/js/counter.int.js"></script>
+<!-- custom js -->
+<script src="~/Landing/js/app.js"></script>
 </body>
 
 </html>

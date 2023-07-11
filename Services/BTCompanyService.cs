@@ -3,50 +3,36 @@ using BugTracker.Models;
 using BugTracker.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace BugTracker.Services
+namespace BugTracker.Services;
+
+public class BTCompanyService : IBTCompanyService
 {
-    public class BTCompanyService : IBTCompanyService
-    {
-        private readonly ApplicationDbContext _context;
-        public BTCompanyService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+  private readonly ApplicationDbContext _context;
 
-        public async Task<Company?> GetCompanyInfoAsync(int companyId)
-        {
-            try
-            {
-                Company? company = await _context.Companies
-                                                 .Include(c => c.Members)
-                                                 .Include(c => c.Projects)
-                                                    .ThenInclude(p => p.Tickets)
-                                                 .Include(c => c.Invites)
-                                                 .FirstOrDefaultAsync(c => c.Id == companyId);
-                return company;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+  public BTCompanyService(ApplicationDbContext context)
+  {
+    _context = context;
+  }
 
-        public async Task<List<BTUser>> GetCompanyMembersAsync(int companyId)
-        {
-            try
-            {
-                List<BTUser> users = await _context.Users.Where(u => u.CompanyId == companyId).ToListAsync();
-                return users;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+  public async Task<Company?> GetCompanyInfoAsync(int companyId)
+  {
+    var company = await _context.Companies
+      .Include(c => c.Members)
+      .Include(c => c.Projects)
+      .ThenInclude(p => p.Tickets)
+      .Include(c => c.Invites)
+      .FirstOrDefaultAsync(c => c.Id == companyId);
+    return company;
+  }
 
-        public async Task<List<BTUser>> GetUsersByCompanyIdAsync(int companyId)
-        {
-            return await _context.Users.Where(u => u.CompanyId == companyId).ToListAsync();
-        }
-    }
+  public async Task<List<BTUser>> GetCompanyMembersAsync(int companyId)
+  {
+    var users = await _context.Users.Where(u => u.CompanyId == companyId).ToListAsync();
+    return users;
+  }
+
+  public async Task<List<BTUser>> GetUsersByCompanyIdAsync(int companyId)
+  {
+    return await _context.Users.Where(u => u.CompanyId == companyId).ToListAsync();
+  }
 }

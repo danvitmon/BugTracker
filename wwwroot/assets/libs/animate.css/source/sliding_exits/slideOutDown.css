@@ -1,14 +1,10 @@
 @keyframes slideOutDown {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
+  from { transform: translate3d(0, 0, 0); }
 
   to {
-    visibility: hidden;
     transform: translate3d(0, 100%, 0);
+    visibility: hidden;
   }
 }
 
-.slideOutDown {
-  animation-name: slideOutDown;
-}
+.slideOutDown { animation-name: slideOutDown; }

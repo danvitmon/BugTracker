@@ -1,108 +1,109 @@
-﻿@model IEnumerable<BugTracker.Models.Ticket>
+﻿@model IEnumerable<Ticket>
 
 @{
-    ViewData["Title"] = "Archived";
+  ViewData["Title"] = "Archived";
 }
 
 
 <div class="row">
-	<h2 class="m-t-0 h3"><b>Archived Tickets </b></h2>
+  <h2 class="m-t-0 h3">
+    <b>Archived Tickets </b>
+  </h2>
 </div>
 <div class="row">
-	<div class="col-12">
-		<div class="card">
-			<div class="card-body">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
 
-				<table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
-					<thead>
-						<tr>
-							<th>Title</th>
-							<th>ID</th>
-							<th>Description</th>
-							<th>Last Updated</th>
-							<th>Project</th>
-							<th>Archived By Project</th>
-							<th>Priority</th>
-							<th>Type</th>
-							<th>&nbsp;</th>
-						</tr>
-					</thead>
+        <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+          <thead>
+          <tr>
+            <th>Title</th>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Last Updated</th>
+            <th>Project</th>
+            <th>Archived By Project</th>
+            <th>Priority</th>
+            <th>Type</th>
+            <th>&nbsp;</th>
+          </tr>
+          </thead>
 
-					<tbody>
-						@foreach (Ticket ticket in Model)
-						{
-							<tr>
-								<td>
-									<a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a>
-								</td>
-								<td>@ticket.Id</td>
-								<td>@ticket.Description</td>
-								<td>@ticket.Updated</td>
-								<td>
-									<a asp-controller="Projects" asp-action="Details" asp-route-id="@ticket.Project.Id">@ticket.Project!.Name</a>
-								</td>
-								<td>@ticket.ArchivedByProject</td>
-								<td>
-									@if (ticket.TicketPriority!.Name == "Urgent")
-									{
-										<h5 style="color:firebrick">Urgent</h5>
-									}
-									else if (ticket.TicketPriority!.Name == "High")
-									{
-										<h5 style="color:orangered">High</h5>
+          <tbody>
+          @foreach (var ticket in Model)
+          {
+            <tr>
+              <td>
+                <a asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">@ticket.Title</a>
+              </td>
+              <td>@ticket.Id</td>
+              <td>@ticket.Description</td>
+              <td>@ticket.Updated</td>
+              <td>
+                <a asp-controller="Projects" asp-action="Details" asp-route-id="@ticket.Project.Id">@ticket.Project!.Name</a>
+              </td>
+              <td>@ticket.ArchivedByProject</td>
+              <td>
+                @if (ticket.TicketPriority!.Name == "Urgent")
+                {
+                  <h5 style="color: firebrick">Urgent</h5>
+                }
+                else if (ticket.TicketPriority!.Name == "High")
+                {
+                  <h5 style="color: orangered">High</h5>
+                }
+                else if (ticket.TicketPriority!.Name == "Medium")
+                {
+                  <h5 style="color: darkslateblue">Medium</h5>
+                }
+                else if (ticket.TicketPriority!.Name == "Low")
+                {
+                  <h5 style="color: forestgreen">Low</h5>
+                }
 
-									}
-									else if (ticket.TicketPriority!.Name == "Medium")
-									{
-										<h5 style="color:darkslateblue">Medium</h5>
-									}
-									else if (ticket.TicketPriority!.Name == "Low")
-									{
-										<h5 style="color:forestgreen">Low</h5>
-									}
+              </td>
+              <td>
+                @if (ticket.TicketType!.Name == "NewDevelopment")
+                {
+                  <h5 class="badge bg-soft-success">New Development</h5>
+                }
+                else if (ticket.TicketType!.Name == "WorkTask")
+                {
+                  <h5 class="badge bg-soft-pink">Work Task</h5>
+                }
+                else if (ticket.TicketType!.Name == "Defect")
+                {
+                  <h5 class="badge bg-soft-danger">Defect</h5>
+                }
+                else if (ticket.TicketType!.Name == "ChangeRequest")
+                {
+                  <h5 class="badge bg-soft-info">Change Request</h5>
+                }
+                else if (ticket.TicketType!.Name == "Enhancement")
+                {
+                  <h5 class="badge bg-soft-primary">Enhancement</h5>
+                }
+                else if (ticket.TicketType!.Name == "GeneralTask")
+                {
+                  <h5 class="badge bg-soft-light">General Task</h5>
+                }
+              </td>
+              <td class="d-flex justify-content-evenly">
+                <a asp-action="Restore" asp-controller="Tickets" asp-route-id="@ticket.Id" type="button" class="btn btn-soft-success waves-effect waves-light">Restore</a>
+              </td>
+            </tr>
+          }
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-								</td>
-								<td>
-									@if (ticket.TicketType!.Name == "NewDevelopment")
-									{
-										<h5 class="badge bg-soft-success">New Development</h5>
-									}
-									else if (ticket.TicketType!.Name == "WorkTask")
-									{
-										<h5 class="badge bg-soft-pink">Work Task</h5>
-									}
-									else if (ticket.TicketType!.Name == "Defect")
-									{
-										<h5 class="badge bg-soft-danger">Defect</h5>
-									}
-									else if (ticket.TicketType!.Name == "ChangeRequest")
-									{
-										<h5 class="badge bg-soft-info">Change Request</h5>
-									}
-									else if (ticket.TicketType!.Name == "Enhancement")
-									{
-										<h5 class="badge bg-soft-primary">Enhancement</h5>
-									}
-									else if (ticket.TicketType!.Name == "GeneralTask")
-									{
-										<h5 class="badge bg-soft-light">General Task</h5>
-									}
-								</td>
-								<td class="d-flex justify-content-evenly">
-									<a asp-action="Restore" asp-controller="Tickets" asp-route-id="@ticket.Id" type="button" class="btn btn-soft-success waves-effect waves-light">Restore</a>
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-	</div>
+  </div>
 </div> <!-- end row -->
 
 @section Scripts{
-	<script>
+  <script>
 		$('#datatable').DataTable();
 	</script>
 }

@@ -1,7 +1,5 @@
 @keyframes fadeOutDown {
-  from {
-    opacity: 1;
-  }
+  from { opacity: 1; }
 
   to {
     opacity: 0;
@@ -9,6 +7,4 @@
   }
 }
 
-.fadeOutDown {
-  animation-name: fadeOutDown;
-}
+.fadeOutDown { animation-name: fadeOutDown; }

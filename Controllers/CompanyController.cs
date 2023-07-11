@@ -1,108 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+
 using BugTracker.Data;
-using BugTracker.Models;
-using Microsoft.AspNetCore.Authorization;
-using BugTracker.Services.Interfaces;
 using BugTracker.Extensions;
+using BugTracker.Models;
 using BugTracker.Models.Enums;
-using Microsoft.AspNetCore.Identity;
 using BugTracker.Models.ViewModels;
+using BugTracker.Services.Interfaces;
 
-namespace BugTracker.Controllers
+namespace BugTracker.Controllers;
+
+[Authorize]
+public class CompanyController : Controller
 {
-    [Authorize]
-    public class CompanyController : Controller
-    {
-        private readonly ApplicationDbContext _context;
-        private readonly IBTCompanyService _companyService;
-        private readonly IBTRolesService _rolesService;
-        private readonly UserManager<BTUser> _userManager;
+  private readonly IBTCompanyService    _companyService;
+  private readonly IBTRolesService      _rolesService;
+  private readonly UserManager<BTUser>  _userManager;
 
-        public CompanyController(ApplicationDbContext context, IBTCompanyService companyService, IBTRolesService rolesService, UserManager<BTUser> userManager)
+  public CompanyController(IBTCompanyService companyService, IBTRolesService rolesService, UserManager<BTUser> userManager)
+  {
+    _companyService = companyService;
+    _rolesService   = rolesService;
+    _userManager    = userManager;
+  }
+
+  // GET: Companies/Index
+  public async Task<IActionResult> Index()
+  {
+    var companyId = User.Identity!.GetCompanyId();
+    var company   = await _companyService.GetCompanyInfoAsync(companyId);
+
+    if (company == null) 
+      return NotFound();
+
+    return View(company);
+  }
+
+  [HttpGet]
+  [Authorize(Roles = nameof(BTRoles.Admin))]
+  public async Task<IActionResult> ManageUserRoles()
+  {
+    var members = await _companyService.GetCompanyMembersAsync(User.Identity!.GetCompanyId());
+    var roles   = await _rolesService.GetRolesAsync();
+
+    List<ManageUserRolesViewModel> model = new();
+
+    foreach (var member in members)
+      if (member.Id != _userManager.GetUserId(User) && !await _rolesService.IsUserInRole(member, nameof(BTRoles.DemoUser)))
+      {
+        var userRoles = await _rolesService.GetUserRolesAsync(member);
+
+        ManageUserRolesViewModel viewModel = new()
         {
-            _context = context;
-            _companyService = companyService;
-            _rolesService = rolesService;
-            _userManager = userManager;
-        }
+          Roles = new SelectList(roles, "Name", "Name", userRoles.FirstOrDefault()),
+          User  = member
+        };
 
-        // GET: Companies/Index
-        public async Task<IActionResult> Index()
-        {
-            int companyId = User.Identity!.GetCompanyId();
-            Company? company = await _companyService.GetCompanyInfoAsync(companyId);
+        model.Add(viewModel);
+      }
 
-            if (company == null)
-            {
-                return NotFound();
-            }
+    return View(model);
+  }
 
-            return View(company);
-        }
+  [HttpPost]
+  [ValidateAntiForgeryToken]
+  [Authorize(Roles = nameof(BTRoles.Admin))]
+  public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel viewModel)
+  {
+    var selectedRole = viewModel.SelectedRole;
+    var userId       = viewModel.User?.Id;
 
-        [HttpGet]
-        [Authorize(Roles = nameof(BTRoles.Admin))]
-        public async Task<IActionResult> ManageUserRoles()
-        {
-            List<BTUser> members = await _companyService.GetCompanyMembersAsync(User.Identity!.GetCompanyId());
-            List<IdentityRole> roles = await _rolesService.GetRolesAsync();
+    if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(selectedRole)) 
+      return NotFound();
 
-            List<ManageUserRolesViewModel> model = new();
+    var user = await _userManager.FindByIdAsync(userId);
+    if (user == null)
+      return NotFound();
 
-            foreach (BTUser member in members)
-            {
-                if (member.Id != _userManager.GetUserId(User) && !await _rolesService.IsUserInRole(member, nameof(BTRoles.DemoUser)))
-                {
-                    IEnumerable<string> userRoles = await _rolesService.GetUserRolesAsync(member);
+    var currentRoles = await _rolesService.GetUserRolesAsync(user);
 
-                    ManageUserRolesViewModel viewModel = new()
-                    {
-                        Roles = new SelectList(roles, "Name", "Name", userRoles.FirstOrDefault()),
-                        User = member,
-                    };
+    if (await _rolesService.RemoveUserFromRolesAsync(user, currentRoles))
+      await _rolesService.AddUserToRoleAsync(user, selectedRole);
 
-                    model.Add(viewModel);
-                } 
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = nameof(BTRoles.Admin))]
-        public async Task<IActionResult> ManageUserRoles(ManageUserRolesViewModel viewModel)
-        {
-            string? selectedRole = viewModel.SelectedRole;
-            string? userId = viewModel.User?.Id;
-
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(selectedRole))
-            {
-                return NotFound();
-            }
-
-            BTUser? user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return NotFound();
-
-            IEnumerable<string> currentRoles = await _rolesService.GetUserRolesAsync(user);
-
-            if (await _rolesService.RemoveUserFromRolesAsync(user, currentRoles))
-            {
-                await _rolesService.AddUserToRoleAsync(user, selectedRole);
-            }
-
-            return RedirectToAction(nameof(ManageUserRoles));
-        }
-
-        private bool CompanyExists(int id)
-        {
-          return (_context.Companies?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-    }
+    return RedirectToAction(nameof(ManageUserRoles));
+  }
 }

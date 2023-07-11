@@ -1,5 +1,4 @@
 ﻿@using BugTracker.Models.Enums;
-@using BugTracker.Services;
 @using BugTracker.Services.Interfaces;
 @model BugTracker.Models.Ticket
 
@@ -7,262 +6,271 @@
 @inject IBTRolesService _rolesService
 
 @{
-    ViewData["Title"] = "Details";
+  ViewData["Title"] = "Details";
 }
 
 <div class="row">
-	<div class="col-md-8">
-		<div class="card">
-			<div class="card-body task-detail">
-				<div class="dropdown float-end">
-					<a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-						<i class="mdi mdi-dots-vertical"></i>
-					</a>
-					<div class="dropdown-menu dropdown-menu-end">
-						<!-- item-->
-						<a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#TicketsEdit" class="dropdown-item">Edit</a>
-						<!-- item-->
-						<a asp-controller="Tickets" asp-action="Archive" asp-route-id="@Model.Id" class="dropdown-item">Archive</a>
-						<!-- item-->
-						<a asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project!.Id" class="dropdown-item">View Project Details</a>
+<div class="col-md-8">
+  <div class="card">
+    <div class="card-body task-detail">
+      <div class="dropdown float-end">
+        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="mdi mdi-dots-vertical"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end">
+          <!-- item-->
+          <a asp-controller="Tickets" asp-action="Edit" asp-route-id="@Model.Id" data-bs-toggle="modal" data-bs-target="#TicketsEdit" class="dropdown-item">Edit</a>
+          <!-- item-->
+          <a asp-controller="Tickets" asp-action="Archive" asp-route-id="@Model.Id" class="dropdown-item">Archive</a>
+          <!-- item-->
+          <a asp-controller="Projects" asp-action="Details" asp-route-id="@Model.Project!.Id" class="dropdown-item">View Project Details</a>
 
-					</div>
-				</div>
-				<div class="d-flex mb-3">
-					<img class="flex-shrink-0 me-3 rounded-circle avatar-md" alt="64x64" src="@_fileService.ConvertByteArrayToFile(Model.SubmitterUser!.ImageFileData,Model.SubmitterUser.ImageFileType,DefaultImage.BTUserImage)">
-					<div class="flex-grow-1">
-						<h3 class="media-heading mt-0">@Model.Title</h3>
-						<span>
-							@if (Model.TicketStatus!.Name == "New")
-							{
-								<h5 class="badge bg-success">New Ticket</h5>
-							}
-							else if (Model.TicketStatus!.Name == "Development")
-							{
-								<h5 class="badge bg-info">In Development</h5>
-							}
-							else if (Model.TicketStatus!.Name == "Testing")
-							{
-								<h5 class="badge bg-warning">In Testing</h5>
-							}
-							else if (Model.TicketStatus!.Name == "Resolved")
-							{
-								<h5 class="badge bg-secondary">Resolved</h5>
-							}
-						</span>
-					</div>
-				</div>
-				<p>
-					@Model.Description
-				</p>
+        </div>
+      </div>
+      <div class="d-flex mb-3">
+        <img class="flex-shrink-0 me-3 rounded-circle avatar-md" alt="64x64" src="@_fileService.ConvertByteArrayToFile(Model.SubmitterUser!.ImageFileData, Model.SubmitterUser.ImageFileType, DefaultImage.BTUserImage)">
+        <div class="flex-grow-1">
+          <h3 class="media-heading mt-0">@Model.Title</h3>
+          <span>
+            @if (Model.TicketStatus!.Name == "New")
+            {
+              <h5 class="badge bg-success">New Ticket</h5>
+            }
+            else if (Model.TicketStatus!.Name == "Development")
+            {
+              <h5 class="badge bg-info">In Development</h5>
+            }
+            else if (Model.TicketStatus!.Name == "Testing")
+            {
+              <h5 class="badge bg-warning">In Testing</h5>
+            }
+            else if (Model.TicketStatus!.Name == "Resolved")
+            {
+              <h5 class="badge bg-secondary">Resolved</h5>
+            }
+          </span>
+        </div>
+      </div>
+      <p>
+        @Model.Description
+      </p>
 
 
-				<div class="row task-dates mb-0 mt-2">
-					<div class="col-lg-6">
-						<h5 class="font-600 m-b-5">Start Date</h5>
-						<p> @Model.Created.ToString("MM.dd.yyyy") <small class="text-muted">@Model.Created.ToString("HH:mm")</small></p>
-					</div>
+      <div class="row task-dates mb-0 mt-2">
+        <div class="col-lg-6">
+          <h5 class="font-600 m-b-5">Start Date</h5>
+          <p>
+            @Model.Created.ToString("MM.dd.yyyy") <small class="text-muted">@Model.Created.ToString("HH:mm")</small>
+          </p>
+        </div>
 
-					<div class="col-lg-6">
-						<h5 class="font-600 m-b-5">Project Status: </h5>
-						@if (Model.Project.Archived)
-						{
-							<h5 class="badge bg-secondary">Archived</h5>
-						}
-						else if (DateTime.UtcNow.Date > DateTime.SpecifyKind(Model.Project.EndDate, DateTimeKind.Utc).Date)
-						{
-							<h3 class="btn btn-danger">Overdue</h3>
-						}
-						else
-						{
-							<h5 class="badge bg-warning">In Progress</h5>
-						}
-						@*<p> @Model.Project.EndDate.ToString("MM.dd.yyyy") <small class="text-muted">@Model.Project.EndDate.ToString("HH:mm")</small></p>*@
-					</div>
-				</div>
+        <div class="col-lg-6">
+          <h5 class="font-600 m-b-5">Project Status: </h5>
+          @if (Model.Project.Archived)
+          {
+            <h5 class="badge bg-secondary">Archived</h5>
+          }
+          else if (DateTime.UtcNow.Date > DateTime.SpecifyKind(Model.Project.EndDate, DateTimeKind.Utc).Date)
+          {
+            <h3 class="btn btn-danger">Overdue</h3>
+          }
+          else
+          {
+            <h5 class="badge bg-warning">In Progress</h5>
+          }
+          @*<p> @Model.Project.EndDate.ToString("MM.dd.yyyy") <small class="text-muted">@Model.Project.EndDate.ToString("HH:mm")</small></p>*@
+        </div>
+      </div>
 
-				<h5 class="text-muted">Submitter:</h5>
-				<h4>@Model.SubmitterUser!.FullName</h4>
-				<br />
+      <h5 class="text-muted">Submitter:</h5>
+      <h4>@Model.SubmitterUser!.FullName</h4>
+      <br/>
 
-				@if (Model.DeveloperUserId is not null)
-				{
-					<h5 class="text-muted">Developer:</h5>
-					<h4>@Model.DeveloperUser!.FullName</h4>
-				}
-				else if (Model.DeveloperUserId is null)
-				{
-					<div>
-						<a asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@Model.Id" type="button" class="btn btn-soft-warning waves-effect waves-light">Assign Developer</a>
-						@*@foreach (BTUser user in (await _RolesService.GetUsersInRoleAsync("Developer", Model.Project.CompanyId)))
+      @if (Model.DeveloperUserId is not null)
+      {
+        <h5 class="text-muted">Developer:</h5>
+        <h4>@Model.DeveloperUser!.FullName</h4>
+      }
+      else if (Model.DeveloperUserId is null)
+      {
+        <div>
+          <a asp-action="AssignDeveloper" asp-controller="Tickets" asp-route-id="@Model.Id" type="button" class="btn btn-soft-warning waves-effect waves-light">Assign Developer</a>
+          @*@foreach (BTUser user in (await _RolesService.GetUsersInRoleAsync("Developer", Model.Project.CompanyId)))
 					{
 
 					<a> <img class="rounded-circle avatar-sm" alt="64x64" src="@_FileService.ConvertByteArrayToFile(Model.SubmitterUser.ImageFileData,Model.SubmitterUser.ImageFileType,DefaultImage.BTUserImage)"> </a>
 
 					}
 					<a href="#"><span class="add-new-plus"><i class="mdi mdi-plus"></i> </span></a>*@
-					</div>
-				}
+        </div>
+      }
 
-				<div class="clearfix"></div>
+      <div class="clearfix"></div>
 
-				@*Ticket Attachments*@
-				<div class="row clearfix">
-					<div>
-						<form asp-action="AddTicketAttachment" asp-controller="Tickets" enctype="multipart/form-data" method="post">
-							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-							<input type="hidden" asp-for="@Model.Id" name="TicketId">
-							<div class="media-body ml-3">
-								<label>
-									Description
-									<input asp-for="@Model.Attachments.FirstOrDefault()!.Description" type="text" class="form-control" />
-								</label><br />
-								<label class="btn btn-outline-primary btn-sm">
-									<input asp-for="@Model.Attachments.FirstOrDefault()!.FormFile" type="file" class="form-control-file" />
-								</label>
-								<button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
-							</div>
-						</form>
-					</div>
-				</div>
+      @*Ticket Attachments*@
+      <div class="row clearfix">
+        <div>
+          <form asp-action="AddTicketAttachment" asp-controller="Tickets" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Id" name="TicketId">
+            <div class="media-body ml-3">
+              <label>
+                Description
+                <input asp-for="@Model.Attachments.FirstOrDefault()!.Description" type="text" class="form-control"/>
+              </label><br/>
+              <label class="btn btn-outline-primary btn-sm">
+                <input asp-for="@Model.Attachments.FirstOrDefault()!.FormFile" type="file" class="form-control-file"/>
+              </label>
+              <button type="submit" class="btn btn-outline-secondary btn-sm md-btn-flat">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
-				@* Ticket attachments part 2 here *@
+      @* Ticket attachments part 2 here *@
 
-				<hr />
-				<h6>Attachments</h6>
-				<div class="container">
-					<div class="row">
-						@foreach (TicketAttachment item in Model.Attachments)
-						{
-							<div class="col col-sm-2">
-								<a asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
-									<div class="icon">
-										<img src="@_fileService.GetFileIcon(item.Description!)" style="height:50px;width:50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.Description" />
-									</div>
-								</a>
-								<div style="font-size:x-small">
-									<div class="file-name">
-										<strong>@item.Description</strong>
-									</div>
-									<small>Size: @_fileService.FormatFileSize(item.FileData!.Length) </small>
-								</div>
-							</div>
-						}
-					</div>
-				</div>
+      <hr/>
+      <h6>Attachments</h6>
+      <div class="container">
+        <div class="row">
+          @foreach (var item in Model.Attachments)
+          {
+            <div class="col col-sm-2">
+              <a asp-action="ShowFile" asp-controller="Tickets" asp-route-Id="@item.Id">
+                <div class="icon">
+                  <img src="@_fileService.GetFileIcon(item.Description!)" style="height: 50px; width: 50px" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="@item.Description"/>
+                </div>
+              </a>
+              <div style="font-size: x-small">
+                <div class="file-name">
+                  <strong>@item.Description</strong>
+                </div>
+                <small>Size: @_fileService.FormatFileSize(item.FileData!.Length) </small>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
 
-			</div>
-		</div>
+    </div>
+  </div>
 
-	</div><!-- end col -->
+</div><!-- end col -->
 
-	<div class="col-md-4">
-		<div class="card">
-			<div class="card-body">
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-body">
 
-				<h4 class="header-title mt-0 mb-3">Comments (@Model.Comments.Count)</h4>
+      <h4 class="header-title mt-0 mb-3">Comments (@Model.Comments.Count)</h4>
 
-				<div>
-					@*Loop to show comments made for the Ticket*@
-					@foreach (TicketComment comment in Model.Comments)
-					{
-						<li>
-							<div class="d-flex mb-3">
-								<div class="flex-shrink-0 me-3">
-									<a><img class="rounded-circle avatar-sm" alt="64x64" src="@_fileService.ConvertByteArrayToFile(comment.User!.ImageFileData,comment.User!.ImageFileType,DefaultImage.BTUserImage)"></a>
-								</div>
-								<div class="flex-grow-1">
-									<h5 class="mt-0">@comment.User!.FullName</h5><span>@comment.Created.ToString("MM.dd.yy")  <small class="text-muted">@comment.Created.ToString("HH:mm")</small></span>
-									<p class="font-13 mb-0">
-										@comment.Comment
-									</p>
-								</div>
-							</div>
+      <div>
+        @*Loop to show comments made for the Ticket*@
+        @foreach (var comment in Model.Comments)
+        {
+          <li>
+            <div class="d-flex mb-3">
+              <div class="flex-shrink-0 me-3">
+                <a>
+                  <img class="rounded-circle avatar-sm" alt="64x64" src="@_fileService.ConvertByteArrayToFile(comment.User!.ImageFileData, comment.User!.ImageFileType, DefaultImage.BTUserImage)">
+                </a>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="mt-0">@comment.User!.FullName</h5>
+                <span>
+                  @comment.Created.ToString("MM.dd.yy") <small class="text-muted">@comment.Created.ToString("HH:mm")</small>
+                </span>
+                <p class="font-13 mb-0">
+                  @comment.Comment
+                </p>
+              </div>
+            </div>
 
-						</li>
-					}
+          </li>
+        }
 
 
-					<div class="d-flex mb-3">
-						<div class=" me-3">
-							<a href="#"> <img class="rounded-circle avatar-sm" alt="64x64" src="@_fileService.ConvertByteArrayToFile(Model.SubmitterUser.ImageFileData,Model.SubmitterUser.ImageFileType,DefaultImage.BTUserImage)"> </a>
-						</div>
-						<form asp-action="AddTicketComment" asp-controller="Tickets" enctype="multipart/form-data" method="post" class="flex-grow-1">
-							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-							<input type="hidden" asp-for="@Model.Id" name="TicketId">
-							<input type="text" name="comment" class="form-control" placeholder="Add a comment...">
-							<div class="form-group mt-2">
-								<input type="submit" value="Add" class="btn btn-primary rounded-pill" />
-							</div>
-						</form>
-					</div>
+        <div class="d-flex mb-3">
+          <div class=" me-3">
+            <a href="#">
+              <img class="rounded-circle avatar-sm" alt="64x64" src="@_fileService.ConvertByteArrayToFile(Model.SubmitterUser.ImageFileData, Model.SubmitterUser.ImageFileType, DefaultImage.BTUserImage)">
+            </a>
+          </div>
+          <form asp-action="AddTicketComment" asp-controller="Tickets" enctype="multipart/form-data" method="post" class="flex-grow-1">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Id" name="TicketId">
+            <input type="text" name="comment" class="form-control" placeholder="Add a comment...">
+            <div class="form-group mt-2">
+              <input type="submit" value="Add" class="btn btn-primary rounded-pill"/>
+            </div>
+          </form>
+        </div>
 
-				</div>
-			</div>
-		</div>
+      </div>
+    </div>
+  </div>
 
-	</div><!-- end col -->
+</div><!-- end col -->
 </div>
 
 <!-- Modal -->
 @*Edit Tickets Modal*@
 <div class="modal fade" id="TicketsEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="staticBackdropLabel">Edit Ticket</h4>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<form asp-action="Edit" asp-controller="Tickets" method="post">
-					<input type="hidden" asp-for="@Model.Id" />
-					<input type="hidden" asp-for="@Model.Created" />
-					<input type="hidden" asp-for="@Model.SubmitterUserId" />
-					<input type="hidden" asp-for="@Model.DeveloperUserId" />
-					<input type="hidden" asp-for="@Model.ProjectId" />
-					<input type="hidden" asp-for="@Model.Archived" />
-					<input type="hidden" asp-for="@Model.ArchivedByProject" />
-					<div class="row g-3 p-2">
-						<div class="col-12 d-flex justify-content-center">
-							<div class="row">
-								<div class="col-12">
-									<label asp-for="@Model.Title" class="control-label"></label>
-									<input asp-for="@Model.Title" class="form-control" />
-									<span asp-validation-for="@Model.Title" class="text-danger"></span>
-								</div>
-								<div class="col-12">
-									<label asp-for="@Model.Description" class="control-label"></label>
-									<input asp-for="@Model.Description" class="form-control" />
-									<span asp-validation-for="@Model.Description" class="text-danger"></span>
-								</div>
-								<div class="col-12 mt-2">
-									<label asp-for="@Model.TicketTypeId" class="control-label"></label>
-									<select asp-for="@Model.TicketTypeId" class="form-control" asp-items="@ViewBag.TicketTypeId"></select>
-									<span asp-validation-for="@Model.TicketTypeId" class="text-danger"></span>
-								</div>
-								<div class="col-12 mt-2">
-									<label asp-for="@Model.TicketStatusId" class="control-label"></label>
-									<select asp-for="@Model.TicketStatusId" class="form-control" asp-items="@ViewBag.TicketStatusId"></select>
-									<span asp-validation-for="@Model.TicketStatusId" class="text-danger"></span>
-								</div>
-								<div class="col-12 mt-2">
-									<label asp-for="@Model.TicketPriorityId" class="control-label"></label>
-									<select asp-for="@Model.TicketPriorityId" class="form-control" asp-items="@ViewBag.TicketPriorityId"></select>
-									<span asp-validation-for="@Model.TicketPriorityId" class="text-danger"></span>
-								</div>
-								<div class="col-12 d-flex justify-content-center mt-2">
-									<button type="submit" class="btn btn-lg btn-primary rounded-pill">Save</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="staticBackdropLabel">Edit Ticket</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form asp-action="Edit" asp-controller="Tickets" method="post">
+          <input type="hidden" asp-for="@Model.Id"/>
+          <input type="hidden" asp-for="@Model.Created"/>
+          <input type="hidden" asp-for="@Model.SubmitterUserId"/>
+          <input type="hidden" asp-for="@Model.DeveloperUserId"/>
+          <input type="hidden" asp-for="@Model.ProjectId"/>
+          <input type="hidden" asp-for="@Model.Archived"/>
+          <input type="hidden" asp-for="@Model.ArchivedByProject"/>
+          <div class="row g-3 p-2">
+            <div class="col-12 d-flex justify-content-center">
+              <div class="row">
+                <div class="col-12">
+                  <label asp-for="@Model.Title" class="control-label"></label>
+                  <input asp-for="@Model.Title" class="form-control"/>
+                  <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                  <label asp-for="@Model.Description" class="control-label"></label>
+                  <input asp-for="@Model.Description" class="form-control"/>
+                  <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                </div>
+                <div class="col-12 mt-2">
+                  <label asp-for="@Model.TicketTypeId" class="control-label"></label>
+                  <select asp-for="@Model.TicketTypeId" class="form-control" asp-items="@ViewBag.TicketTypeId"></select>
+                  <span asp-validation-for="@Model.TicketTypeId" class="text-danger"></span>
+                </div>
+                <div class="col-12 mt-2">
+                  <label asp-for="@Model.TicketStatusId" class="control-label"></label>
+                  <select asp-for="@Model.TicketStatusId" class="form-control" asp-items="@ViewBag.TicketStatusId"></select>
+                  <span asp-validation-for="@Model.TicketStatusId" class="text-danger"></span>
+                </div>
+                <div class="col-12 mt-2">
+                  <label asp-for="@Model.TicketPriorityId" class="control-label"></label>
+                  <select asp-for="@Model.TicketPriorityId" class="form-control" asp-items="@ViewBag.TicketPriorityId"></select>
+                  <span asp-validation-for="@Model.TicketPriorityId" class="text-danger"></span>
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-2">
+                  <button type="submit" class="btn btn-lg btn-primary rounded-pill">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
 
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </div>

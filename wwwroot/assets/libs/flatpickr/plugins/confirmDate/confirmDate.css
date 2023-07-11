@@ -1,24 +1,22 @@
 .flatpickr-confirm {
-	height: 40px;
-	max-height: 0px;
-	visibility: hidden;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	cursor: pointer;
-	background: rgba(0,0,0,0.06)
+  align-items: center;
+  background: rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  max-height: 0px;
+  visibility: hidden;
 }
 
-.flatpickr-confirm svg path {
-	fill: inherit;
-}
+.flatpickr-confirm svg path { fill: inherit; }
 
 .flatpickr-confirm.darkTheme {
-	color: white;
-	fill: white;
+  color: white;
+  fill: white;
 }
 
 .flatpickr-confirm.visible {
-	max-height: 40px;
-	visibility: visible
+  max-height: 40px;
+  visibility: visible
 }
