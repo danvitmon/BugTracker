@@ -5,13 +5,9 @@
     transform-origin: center bottom;
   }
 
-  50% {
-    transform: rotate(-10deg);
-  }
+  50% { transform: rotate(-10deg); }
 
-  70% {
-    transform: rotate(3deg);
-  }
+  70% { transform: rotate(3deg); }
 
   to {
     opacity: 1;
@@ -19,6 +15,4 @@
   }
 }
 
-.jackInTheBox {
-  animation-name: jackInTheBox;
-}
+.jackInTheBox { animation-name: jackInTheBox; }

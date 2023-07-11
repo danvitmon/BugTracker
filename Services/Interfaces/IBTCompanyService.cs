@@ -1,11 +1,10 @@
 ﻿using BugTracker.Models;
 
-namespace BugTracker.Services.Interfaces
+namespace BugTracker.Services.Interfaces;
+
+public interface IBTCompanyService
 {
-    public interface IBTCompanyService
-    {
-        Task<Company?> GetCompanyInfoAsync(int companyId);
-        Task<List<BTUser>> GetCompanyMembersAsync(int companyId);
-        Task<List<BTUser>> GetUsersByCompanyIdAsync(int companyId);
-    }
+  Task<Company?> GetCompanyInfoAsync(int companyId);
+  Task<List<BTUser>> GetCompanyMembersAsync(int companyId);
+  Task<List<BTUser>> GetUsersByCompanyIdAsync(int companyId);
 }

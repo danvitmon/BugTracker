@@ -1,46 +1,40 @@
 .flatpickr-monthSelect-months {
-  margin: 10px 1px 3px 1px;
   flex-wrap: wrap;
+  margin: 10px 1px 3px 1px;
 }
 
 .flatpickr-monthSelect-month {
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  -webkit-box-sizing: border-box;
+  -webkit-justify-content: center;
   background: none;
   border: 0;
   border-radius: 2px;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #393939;
   cursor: pointer;
   display: inline-block;
   font-weight: 400;
-  margin: 0.5px;
   justify-content: center;
+  margin: 0.5px;
   padding: 10px;
   position: relative;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
   text-align: center;
   width: 33%;
 }
 
-.flatpickr-monthSelect-month.disabled {
-	color: #eee;
-}
+.flatpickr-monthSelect-month.disabled { color: #eee; }
 
 .flatpickr-monthSelect-month.disabled:hover,
 .flatpickr-monthSelect-month.disabled:focus {
-	cursor: not-allowed;
-	background: none !important;
+  background: none !important;
+  cursor: not-allowed;
 }
 
-.flatpickr-monthSelect-theme-dark {
-  background: #3f4458;
-}
+.flatpickr-monthSelect-theme-dark { background: #3f4458; }
 
-.flatpickr-monthSelect-theme-dark .flatpickr-current-month input.cur-year {
-  color: #fff;
-}
+.flatpickr-monthSelect-theme-dark .flatpickr-current-month input.cur-year { color: #fff; }
 
 .flatpickr-monthSelect-theme-dark .flatpickr-months .flatpickr-prev-month,
 .flatpickr-monthSelect-theme-dark .flatpickr-months .flatpickr-next-month {
@@ -48,9 +42,7 @@
   fill: #fff;
 }
 
-.flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month {
-  color: rgba(255, 255, 255, 0.95);
-}
+.flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month { color: rgba(255, 255, 255, 0.95); }
 
 .flatpickr-monthSelect-month:hover,
 .flatpickr-monthSelect-month:focus {
@@ -71,9 +63,9 @@
 }
 
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month.selected {
-  background: #80cbc4;
   -webkit-box-shadow: none;
+  background: #80cbc4;
+  border-color: #80cbc4;
   box-shadow: none;
   color: #fff;
-  border-color: #80cbc4;
 }

@@ -1,12 +1,11 @@
-﻿namespace BugTracker.Models.Enums
+﻿namespace BugTracker.Models.Enums;
+
+public enum BTTicketTypes
 {
-    public enum BTTicketTypes
-    {
-        NewDevelopment,
-        WorkTask,
-        Defect,
-        ChangeRequest,
-        Enhancement,
-        GeneralTask
-    }
+  NewDevelopment,
+  WorkTask,
+  Defect,
+  ChangeRequest,
+  Enhancement,
+  GeneralTask
 }

@@ -1,8 +1,7 @@
-﻿namespace BugTracker.Models.Enums
+﻿namespace BugTracker.Models.Enums;
+
+public enum BTNotificationType
 {
-    public enum BTNotificationType
-    {
-        Project,
-        Ticket
-    }
+  Project,
+  Ticket
 }

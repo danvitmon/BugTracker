@@ -1,11 +1,10 @@
-﻿namespace BugTracker.Models.Enums
+﻿namespace BugTracker.Models.Enums;
+
+public enum BTRoles
 {
-    public enum BTRoles
-    {
-        Admin,
-        ProjectManager,
-        Developer,
-        Submitter,
-        DemoUser
-    }
+  Admin,
+  ProjectManager,
+  Developer,
+  Submitter,
+  DemoUser
 }

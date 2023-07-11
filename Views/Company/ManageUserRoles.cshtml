@@ -1,62 +1,66 @@
-﻿@using BugTracker.Models.Enums;
-@using BugTracker.Models.ViewModels;
-@using BugTracker.Services;
-@using BugTracker.Services.Interfaces;
-
-@model IEnumerable<ManageUserRolesViewModel>
+﻿@using BugTracker.Services.Interfaces
+@using BugTracker.Models.Enums
+@model IEnumerable<BugTracker.Models.ViewModels.ManageUserRolesViewModel>
 
 @inject IBTFileService _FileService;
 
 
 <div class="container-fluid">
 
-	<div class="row">
-		<h2 class="m-t-0 h3"><b>Manage Member Roles </b></h2>
-	</div>
-	<!-- end row -->
+  <div class="row">
+    <h2 class="m-t-0 h3">
+      <b>Manage Member Roles </b>
+    </h2>
+  </div>
+  <!-- end row -->
 
 
-	<div class="row">
-		@foreach (ManageUserRolesViewModel viewModel in Model)
-		{
-			<div class="col-xl-4">
-				<div class="card">
-					<div class="text-center card-body">
-						<div>
-							<img src="@_FileService.ConvertByteArrayToFile(viewModel.User!.ImageFileData,viewModel.User!.ImageFileType,DefaultImage.BTUserImage)" class="rounded-circle avatar-xl img-thumbnail mb-2" alt="profile-image">
+  <div class="row">
+    @foreach (var viewModel in Model)
+    {
+      <div class="col-xl-4">
+        <div class="card">
+          <div class="text-center card-body">
+            <div>
+              <img src="@_FileService.ConvertByteArrayToFile(viewModel.User!.ImageFileData, viewModel.User!.ImageFileType, DefaultImage.BTUserImage)" class="rounded-circle avatar-xl img-thumbnail mb-2" alt="profile-image">
 
-							<p class="text-muted font-13 mb-3">
-								Hello! I'm @viewModel.User.FirstName.
-							</p>
+              <p class="text-muted font-13 mb-3">
+                Hello! I'm @viewModel.User.FirstName.
+              </p>
 
-							<div class="text-start">
-								<p class="text-muted font-13"><strong>Full Name :</strong> <span class="ms-2">@viewModel.User!.FullName</span></p>
+              <div class="text-start">
+                <p class="text-muted font-13">
+                  <strong>Full Name :</strong> <span class="ms-2">@viewModel.User!.FullName</span>
+                </p>
 
-								<p class="text-muted font-13"><strong>Email :</strong> <span class="ms-2">@viewModel.User.Email</span></p>
-								<p class="text-muted font-13">
-									<strong>Current Position - Select to change: </strong>
-									<form asp-action="ManageUserRoles" asp-controller="Company" method="post">
-										<input type="hidden" asp-for="@viewModel.User.Id" />
-										<div class="form-group">
-											@*<label asp-for="@viewModel.Roles" class="custom-label"> Roles for @viewModel.User.FullName </label>*@
-											<select asp-for="@viewModel.SelectedRole" class="form-control tom-select" asp-items="@viewModel.Roles">
-											</select>
-										</div>
-										<div class="form-group mt-2">
-											<input type="submit" value="Assign New Role" class="btn btn-info" />
-										</div>
-									</form>
-								</p>
-							</div>
+                <p class="text-muted font-13">
+                  <strong>Email :</strong> <span class="ms-2">@viewModel.User.Email</span>
+                </p>
+                <p class="text-muted font-13">
+                  <strong>Current Position - Select to change: </strong>
+                  <form asp-action="ManageUserRoles" asp-controller="Company" method="post">
+                    <input type="hidden" asp-for="@viewModel.User.Id"/>
+                    <div class="form-group">
+                      @*<label asp-for="@viewModel.Roles" class="custom-label"> Roles for @viewModel.User.FullName </label>*@
+                      <select asp-for="@viewModel.SelectedRole" class="form-control tom-select" asp-items="@viewModel.Roles">
+                      </select>
+                    </div>
+                    <div class="form-group mt-2">
+                      <input type="submit" value="Assign New Role" class="btn btn-info"/>
+                    </div>
+                  </form>
+                </p>
+              </div>
 
 
-						</div>
-					</div>
-				</div>
+            </div>
+          </div>
+        </div>
 
 
-			</div> <!-- end col -->
-		}
-	</div>
-	<!-- end row -->
+      </div>
+      <!-- end col -->
+    }
+  </div>
+  <!-- end row -->
 </div>

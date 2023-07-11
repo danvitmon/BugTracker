@@ -1,9 +1,8 @@
-﻿namespace BugTracker.Models.Enums
+﻿namespace BugTracker.Models.Enums;
+
+public enum DefaultImage
 {
-    public enum DefaultImage
-    {
-        BTUserImage = 1,
-        CompanyImage = 2,
-        ProjectImage = 3
-    }
+  BTUserImage = 1,
+  CompanyImage = 2,
+  ProjectImage = 3
 }

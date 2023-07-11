@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BugTracker.Models.ViewModels
+namespace BugTracker.Models.ViewModels;
+
+public class ManageUserRolesViewModel
 {
-    public class ManageUserRolesViewModel
-    {
-        public SelectList? Roles { get; set; }
-        public BTUser? User { get; set; }
-        public string? SelectedRole { get; set; }
-    }
+  public SelectList? Roles        { get; set; }
+  public BTUser?     User         { get; set; }
+  public string?     SelectedRole { get; set; }
 }

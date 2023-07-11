@@ -1,7 +1,5 @@
 @keyframes fadeOutDownBig {
-  from {
-    opacity: 1;
-  }
+  from { opacity: 1; }
 
   to {
     opacity: 0;
@@ -9,6 +7,4 @@
   }
 }
 
-.fadeOutDownBig {
-  animation-name: fadeOutDownBig;
-}
+.fadeOutDownBig { animation-name: fadeOutDownBig; }

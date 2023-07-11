@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BugTracker.Models.ViewModels
+namespace BugTracker.Models.ViewModels;
+
+public class AssignPmViewModel
 {
-    public class AssignPMViewModel
-    {
-        public Project? Project { get; set; }
-        public SelectList? PMList { get; set; }
-        public string? PMId { get; set; }
-        public string? MemberId { get; set; }
-    }
+  public Project?    Project  { get; set; }
+  public SelectList? PmList   { get; set; }
+  public string?     PmId     { get; set; }
+  public string?     MemberId { get; set; }
 }

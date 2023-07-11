@@ -1,10 +1,9 @@
-﻿namespace BugTracker.Models.Enums
+﻿namespace BugTracker.Models.Enums;
+
+public enum BTTicketPriorities
 {
-    public enum BTTicketPriorities
-    {
-        Low,
-        Medium,
-        High,
-        Urgent
-    }
+  Low,
+  Medium,
+  High,
+  Urgent
 }
