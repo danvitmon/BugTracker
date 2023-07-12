@@ -4,10 +4,9 @@ namespace BugTracker.Services;
 
 public class BTImageService : IBTImageService
 {
-  private readonly string? _defaultBlogImage = "/img/DefaultBlogImage.png";
+  private readonly string? _defaultBlogImage     = "/img/DefaultBlogImage.png";
   private readonly string? _defaultCategoryImage = "/img/DefaultCategoryImage.png";
-
-  private readonly string? _defaultUserImage = "/img/DefaultContactImage.png";
+  private readonly string? _defaultUserImage     = "/img/DefaultContactImage.png";
 
   public string? ConvertByteArrayToFile(byte[]? fileData, string? extension, int defaultImage)
   {
@@ -32,7 +31,9 @@ public class BTImageService : IBTImageService
   {
     using var memoryStream = new MemoryStream();
     await file!.CopyToAsync(memoryStream);
+
     var byteFile = memoryStream.ToArray();
+
     memoryStream.Close();
 
     return byteFile;

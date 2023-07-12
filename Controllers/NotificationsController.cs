@@ -1,8 +1,9 @@
-﻿using BugTracker.Data;
-using BugTracker.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
+using BugTracker.Data;
+using BugTracker.Models;
 
 namespace BugTracker.Controllers;
 
@@ -20,13 +21,15 @@ public class NotificationsController : Controller
   {
     var applicationDbContext = _context.Notifications /*.Include(n => n.NotificationType)*/.Include(n => n.Project)
       .Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
-    return View(await applicationDbContext.ToListAsync());
+    
+      return View(await applicationDbContext.ToListAsync());
   }
 
   // GET: Notifications/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.Notifications == null) return NotFound();
+    if (id == null || _context.Notifications == null) 
+      return NotFound();
 
     var notification = await _context.Notifications
       //.Include(n => n.NotificationType)
@@ -35,7 +38,9 @@ public class NotificationsController : Controller
       .Include(n => n.Sender)
       .Include(n => n.Ticket)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (notification == null) return NotFound();
+
+    if (notification == null) 
+      return NotFound();
 
     return View(notification);
   }
@@ -43,11 +48,11 @@ public class NotificationsController : Controller
   // GET: Notifications/Create
   public IActionResult Create()
   {
-    //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id");
-    ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description");
-    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
-    ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
-    ViewData["TicketId"] = new SelectList(_context.Set<Ticket>(), "Id", "Description");
+    ViewData["ProjectId"]   = new SelectList(_context.Set<Project>(), "Id", "Description");
+    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(),  "Id", "Id");
+    ViewData["SenderId"]    = new SelectList(_context.Set<BTUser>(),  "Id", "Id");
+    ViewData["TicketId"]    = new SelectList(_context.Set<Ticket>(),  "Id", "Description");
+    
     return View();
   }
 
@@ -64,14 +69,15 @@ public class NotificationsController : Controller
     {
       _context.Add(notification);
       await _context.SaveChangesAsync();
+      
       return RedirectToAction(nameof(Index));
     }
 
-    //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
-    ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
-    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.RecipientId);
-    ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.SenderId);
-    ViewData["TicketId"] = new SelectList(_context.Set<Ticket>(), "Id", "Description", notification.TicketId);
+    ViewData["ProjectId"]   = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
+    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.RecipientId);
+    ViewData["SenderId"]    = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.SenderId);
+    ViewData["TicketId"]    = new SelectList(_context.Set<Ticket>(),  "Id", "Description", notification.TicketId);
+    
     return View(notification);
   }
 
@@ -82,11 +88,11 @@ public class NotificationsController : Controller
 
     var notification = await _context.Notifications.FindAsync(id);
     if (notification == null) return NotFound();
-    //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
-    ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
-    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.RecipientId);
-    ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.SenderId);
-    ViewData["TicketId"] = new SelectList(_context.Set<Ticket>(), "Id", "Description", notification.TicketId);
+    ViewData["ProjectId"]   = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
+    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.RecipientId);
+    ViewData["SenderId"]    = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.SenderId);
+    ViewData["TicketId"]    = new SelectList(_context.Set<Ticket>(),  "Id", "Description", notification.TicketId);
+    
     return View(notification);
   }
 
@@ -112,24 +118,26 @@ public class NotificationsController : Controller
       {
         if (!NotificationExists(notification.Id))
           return NotFound();
-        throw;
+        
+          throw;
       }
 
       return RedirectToAction(nameof(Index));
     }
 
     //ViewData["NotificationTypeId"] = new SelectList(_context.Set<NotificationType>(), "Id", "Id", notification.NotificationTypeId);
-    ViewData["ProjectId"] = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
-    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.RecipientId);
-    ViewData["SenderId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", notification.SenderId);
-    ViewData["TicketId"] = new SelectList(_context.Set<Ticket>(), "Id", "Description", notification.TicketId);
+    ViewData["ProjectId"]   = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
+    ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.RecipientId);
+    ViewData["SenderId"]    = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.SenderId);
+    ViewData["TicketId"]    = new SelectList(_context.Set<Ticket>(),  "Id", "Description", notification.TicketId);
     return View(notification);
   }
 
   // GET: Notifications/Delete/5
   public async Task<IActionResult> Delete(int? id)
   {
-    if (id == null || _context.Notifications == null) return NotFound();
+    if (id == null || _context.Notifications == null) 
+      return NotFound();
 
     var notification = await _context.Notifications
       //.Include(n => n.NotificationType)
@@ -138,7 +146,8 @@ public class NotificationsController : Controller
       .Include(n => n.Sender)
       .Include(n => n.Ticket)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (notification == null) return NotFound();
+    if (notification == null) 
+      return NotFound();
 
     return View(notification);
   }
@@ -149,11 +158,13 @@ public class NotificationsController : Controller
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
-    if (_context.Notifications == null) return Problem("Entity set 'ApplicationDbContext.Notification'  is null.");
+    if (_context.Notifications == null) 
+      return Problem("Entity set 'ApplicationDbContext.Notification'  is null.");
     var notification = await _context.Notifications.FindAsync(id);
     if (notification != null) _context.Notifications.Remove(notification);
 
     await _context.SaveChangesAsync();
+    
     return RedirectToAction(nameof(Index));
   }
 

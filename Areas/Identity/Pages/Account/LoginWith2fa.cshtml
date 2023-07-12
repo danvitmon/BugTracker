@@ -1,5 +1,7 @@
 ﻿@page
+
 @model LoginWith2faModel
+
 @{
   ViewData["Title"] = "Two-factor authentication";
 }
@@ -34,6 +36,7 @@
   <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">log in with a recovery code</a>.
 </p>
 
-@section Scripts {
+@section Scripts 
+{
   <partial name="_ValidationScriptsPartial"/>
 }

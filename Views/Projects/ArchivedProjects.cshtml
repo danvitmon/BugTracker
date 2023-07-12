@@ -1,10 +1,11 @@
 ﻿﻿@using BugTracker.Models.Enums;
 @using BugTracker.Services.Interfaces
+
 @model IEnumerable<Project>
 
-@inject IBTFileService _FileService
+@inject IBTFileService    _FileService
 @inject IBTProjectService _ProjectService;
-@inject IBTRolesService _RolesService;
+@inject IBTRolesService   _RolesService;
 
 @{
   ViewData["Title"] = "Archived Projects";

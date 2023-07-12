@@ -1,7 +1,8 @@
-﻿using BugTracker.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
+using BugTracker.Data;
 using BugTracker.Models;
 using BugTracker.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Services;
 
@@ -23,9 +24,10 @@ public class BTInviteService : IBTInviteService
                                   && i.CompanyId == companyId
                                   && i.IsValid == true);
 
-      if (invite == null) return false;
+      if (invite == null) 
+        return false;
 
-      invite.IsValid = false;
+      invite.IsValid   = false;
       invite.InviteeId = userId;
       await _context.SaveChangesAsync();
 
@@ -34,6 +36,7 @@ public class BTInviteService : IBTInviteService
     catch (Exception)
     {
       return false;
+      
       throw;
     }
   }
@@ -96,7 +99,8 @@ public class BTInviteService : IBTInviteService
 
   public async Task<bool> ValidateInviteCodeAsync(Guid? token)
   {
-    if (token is null) return false;
+    if (token is null) 
+      return false;
 
     var result = false;
 

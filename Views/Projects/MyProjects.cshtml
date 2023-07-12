@@ -1,10 +1,11 @@
 ﻿﻿@using BugTracker.Models.Enums;
 @using BugTracker.Services.Interfaces;
+
 @model IEnumerable<BugTracker.Models.Project>
 
-@inject IBTFileService _fileService
+@inject IBTFileService    _fileService
 @inject IBTProjectService _projectService;
-@inject IBTRolesService _rolesService;
+@inject IBTRolesService   _rolesService;
 
 @{
   ViewData["Title"] = "My Projects";
@@ -118,11 +119,6 @@
 @*MODALS*@
 @foreach (var project in Model)
 {
-  <!-- Button trigger modal -->
-	@*<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AssignPM">
-	Launch demo modal
-</button>
-*@
   <!-- Modal -->
 	@*Assign PM Modal*@
   <div class="modal fade" id="AssignPM" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -147,12 +143,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Button trigger modal -->
-	@*	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ProjectsCreate">
-		Launch static backdrop modal
-	</button>*@
-
 
   <!-- CREATE PROJECT Modal -->
   <div class="modal fade" id="ProjectsCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -213,7 +203,8 @@
   </div>
 }
 
-@section Scripts {
+@section Scripts 
+{
   @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
   }

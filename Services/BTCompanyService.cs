@@ -1,7 +1,8 @@
-﻿using BugTracker.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
+using BugTracker.Data;
 using BugTracker.Models;
 using BugTracker.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Services;
 
@@ -22,12 +23,14 @@ public class BTCompanyService : IBTCompanyService
       .ThenInclude(p => p.Tickets)
       .Include(c => c.Invites)
       .FirstOrDefaultAsync(c => c.Id == companyId);
-    return company;
+    
+      return company;
   }
 
   public async Task<List<BTUser>> GetCompanyMembersAsync(int companyId)
   {
     var users = await _context.Users.Where(u => u.CompanyId == companyId).ToListAsync();
+    
     return users;
   }
 

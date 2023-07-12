@@ -1,10 +1,7 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-#nullable disable
+﻿#nullable disable
 
 using System.Text;
-using BugTracker.Models;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -12,18 +9,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
+using BugTracker.Models;
+
 namespace BugTracker.Areas.Identity.Pages.Account;
 
 [AllowAnonymous]
 public class RegisterConfirmationModel : PageModel
 {
-  private readonly IEmailSender _sender;
+  private readonly IEmailSender        _sender;
   private readonly UserManager<BTUser> _userManager;
 
   public RegisterConfirmationModel(UserManager<BTUser> userManager, IEmailSender sender)
   {
     _userManager = userManager;
-    _sender = sender;
+    _sender      = sender;
   }
 
   /// <summary>
@@ -57,14 +56,10 @@ public class RegisterConfirmationModel : PageModel
     DisplayConfirmAccountLink = true;
     if (DisplayConfirmAccountLink)
     {
-      var userId = await _userManager.GetUserIdAsync(user);
-      var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-      code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-      EmailConfirmationUrl = Url.Page(
-        "/Account/ConfirmEmail",
-        null,
-        new { area = "Identity", userId, code, returnUrl },
-        Request.Scheme);
+      var userId           = await _userManager.GetUserIdAsync(user);
+      var code             = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+      code                 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+      EmailConfirmationUrl = Url.Page("/Account/ConfirmEmail", null, new { area = "Identity", userId, code, returnUrl }, Request.Scheme);
     }
 
     return Page();

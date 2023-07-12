@@ -1,19 +1,19 @@
-﻿using BugTracker.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using BugTracker.Data;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
 using BugTracker.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Services;
 
 public class BTProjectService : IBTProjectService
 {
   private readonly ApplicationDbContext _context;
-  private readonly IBTRolesService _rolesService;
+  private readonly IBTRolesService      _rolesService;
 
   public BTProjectService(ApplicationDbContext context, IBTRolesService rolesService)
   {
-    _context = context;
+    _context      = context;
     _rolesService = rolesService;
   }
 
@@ -25,12 +25,13 @@ public class BTProjectService : IBTProjectService
 
   public async Task ArchiveProjectAsync(Project project, int companyId)
   {
-    if (project.CompanyId != companyId) return;
+    if (project.CompanyId != companyId) 
+      return;
 
     foreach (var ticket in project.Tickets)
     {
       ticket.ArchivedByProject = !ticket.Archived;
-      ticket.Archived = true;
+      ticket.Archived          = true;
     }
 
     project.Archived = true;
@@ -47,7 +48,7 @@ public class BTProjectService : IBTProjectService
   public async Task<List<Project>> GetProjectsByPriorityAsync(int companyId, string priority)
   {
     return await _context.Projects.Include(p => p.ProjectPriority)
-      .Where(p => p.CompanyId == companyId && !p.Archived && string.Equals(p.ProjectPriority!.Name, priority))
+      .Where  (p => p.CompanyId == companyId && !p.Archived && string.Equals(p.ProjectPriority!.Name, priority))
       .Include(p => p.Tickets).Include(p => p.Members).ToListAsync();
   }
 
@@ -66,13 +67,13 @@ public class BTProjectService : IBTProjectService
   public async Task<Project?> GetProjectByIdAsync(int projectId, int companyId)
   {
     return await _context.Projects
-      .Include(p => p.Company)
-      .Include(p => p.ProjectPriority)
-      .Include(p => p.Members)
-      .Include(p => p.Tickets)
-      .ThenInclude(t => t.DeveloperUser)
-      .Include(p => p.Tickets)
-      .ThenInclude(t => t.SubmitterUser)
+      .Include            (p => p.Company)
+      .Include            (p => p.ProjectPriority)
+      .Include            (p => p.Members)
+      .Include            (p => p.Tickets)
+      .ThenInclude        (t => t.DeveloperUser)
+      .Include            (p => p.Tickets)
+      .ThenInclude        (t => t.SubmitterUser)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
   }
 
@@ -96,11 +97,12 @@ public class BTProjectService : IBTProjectService
 
   public async Task RestoreProjectAsync(Project project, int companyId)
   {
-    if (project.CompanyId != companyId) return;
+    if (project.CompanyId != companyId) 
+      return;
 
     foreach (var ticket in project.Tickets)
     {
-      ticket.Archived = !ticket.ArchivedByProject;
+      ticket.Archived          = !ticket.ArchivedByProject;
       ticket.ArchivedByProject = false;
     }
 
@@ -111,7 +113,8 @@ public class BTProjectService : IBTProjectService
 
   public async Task UpdateProjectAsync(Project project, int companyId)
   {
-    if (project.CompanyId != companyId) return;
+    if (project.CompanyId != companyId) 
+      return;
 
     _context.Update(project);
     await _context.SaveChangesAsync();
@@ -120,8 +123,8 @@ public class BTProjectService : IBTProjectService
   public async Task<BTUser?> GetProjectManagerAsync(int projectId, int companyId)
   {
     var project = await _context.Projects
-      .AsNoTracking()
-      .Include(p => p.Members)
+      .AsNoTracking       ()
+      .Include            (p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
     if (project is not null)
@@ -136,6 +139,7 @@ public class BTProjectService : IBTProjectService
   {
     var project = await _context.Projects.Include(p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
+
     var projectManager = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId && u.CompanyId == companyId);
 
     if (project is not null && projectManager is not null)
@@ -171,18 +175,20 @@ public class BTProjectService : IBTProjectService
   public async Task<List<BTUser>> GetProjectMembersByRoleAsync(int projectId, string roleName, int companyId)
   {
     var project = await _context.Projects
-      .AsNoTracking()
-      .Include(p => p.Members)
+      .AsNoTracking       ()
+      .Include            (p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
     if (project is not null)
     {
       var members = project.Members.ToList();
       List<BTUser> rolemembers = new();
+
       foreach (var member in members)
         if (await _rolesService.IsUserInRole(member, roleName))
           rolemembers.Add(member);
-      return rolemembers;
+      
+          return rolemembers;
     }
 
     return new List<BTUser>();
@@ -191,7 +197,7 @@ public class BTProjectService : IBTProjectService
   public async Task<bool> AddMemberToProjectAsync(BTUser member, int projectId, int companyId)
   {
     var project = await _context.Projects
-      .Include(p => p.Members)
+      .Include            (p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
     if (project is not null && member.CompanyId == companyId)
@@ -199,6 +205,7 @@ public class BTProjectService : IBTProjectService
       project.Members.Add(member);
       _context.Update(project);
       await _context.SaveChangesAsync();
+      
       return true;
     }
 
@@ -208,7 +215,7 @@ public class BTProjectService : IBTProjectService
   public async Task<bool> RemoveMemberFromProjectAsync(BTUser member, int projectId, int companyId)
   {
     var project = await _context.Projects
-      .Include(p => p.Members)
+      .Include            (p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
     if (project is not null)
@@ -216,6 +223,7 @@ public class BTProjectService : IBTProjectService
       project.Members.Remove(member);
       _context.Update(project);
       await _context.SaveChangesAsync();
+      
       return true;
     }
 

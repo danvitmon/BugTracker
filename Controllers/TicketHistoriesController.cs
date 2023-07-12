@@ -1,8 +1,9 @@
-﻿using BugTracker.Data;
-using BugTracker.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
+using BugTracker.Data;
+using BugTracker.Models;
 
 namespace BugTracker.Controllers;
 
@@ -19,19 +20,23 @@ public class TicketHistoriesController : Controller
   public async Task<IActionResult> Index()
   {
     var applicationDbContext = _context.TicketHistory.Include(t => t.Ticket).Include(t => t.User);
+    
     return View(await applicationDbContext.ToListAsync());
   }
 
   // GET: TicketHistories/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.TicketHistory == null) return NotFound();
+    if (id == null || _context.TicketHistory == null) 
+      return NotFound();
 
     var ticketHistory = await _context.TicketHistory
       .Include(t => t.Ticket)
       .Include(t => t.User)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (ticketHistory == null) return NotFound();
+    
+      if (ticketHistory == null) 
+        return NotFound();
 
     return View(ticketHistory);
   }
@@ -39,8 +44,9 @@ public class TicketHistoriesController : Controller
   // GET: TicketHistories/Create
   public IActionResult Create()
   {
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description");
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id");
+    
     return View();
   }
 
@@ -56,23 +62,29 @@ public class TicketHistoriesController : Controller
     {
       _context.Add(ticketHistory);
       await _context.SaveChangesAsync();
+      
       return RedirectToAction(nameof(Index));
     }
 
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketHistory.UserId);
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketHistory.TicketId);
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketHistory.UserId);
+    
     return View(ticketHistory);
   }
 
   // GET: TicketHistories/Edit/5
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null || _context.TicketHistory == null) return NotFound();
+    if (id == null || _context.TicketHistory == null) 
+      return NotFound();
 
     var ticketHistory = await _context.TicketHistory.FindAsync(id);
-    if (ticketHistory == null) return NotFound();
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketHistory.UserId);
+    if (ticketHistory == null) 
+      return NotFound();
+
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketHistory.TicketId);
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketHistory.UserId);
+
     return View(ticketHistory);
   }
 
@@ -84,7 +96,8 @@ public class TicketHistoriesController : Controller
   public async Task<IActionResult> Edit(int id,
     [Bind("Id,PropertyName,Description,Created,OldValue,NewValue,TicketId,UserId")] TicketHistory ticketHistory)
   {
-    if (id != ticketHistory.Id) return NotFound();
+    if (id != ticketHistory.Id) 
+      return NotFound();
 
     if (ModelState.IsValid)
     {
@@ -97,27 +110,32 @@ public class TicketHistoriesController : Controller
       {
         if (!TicketHistoryExists(ticketHistory.Id))
           return NotFound();
-        throw;
+        
+          throw;
       }
 
       return RedirectToAction(nameof(Index));
     }
 
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketHistory.TicketId);
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketHistory.UserId);
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketHistory.TicketId);
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketHistory.UserId);
+   
     return View(ticketHistory);
   }
 
   // GET: TicketHistories/Delete/5
   public async Task<IActionResult> Delete(int? id)
   {
-    if (id == null || _context.TicketHistory == null) return NotFound();
+    if (id == null || _context.TicketHistory == null) 
+      return NotFound();
 
     var ticketHistory = await _context.TicketHistory
       .Include(t => t.Ticket)
       .Include(t => t.User)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (ticketHistory == null) return NotFound();
+
+    if (ticketHistory == null) 
+      return NotFound();
 
     return View(ticketHistory);
   }
@@ -129,10 +147,12 @@ public class TicketHistoriesController : Controller
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
     if (_context.TicketHistory == null) return Problem("Entity set 'ApplicationDbContext.TicketHistory'  is null.");
+
     var ticketHistory = await _context.TicketHistory.FindAsync(id);
     if (ticketHistory != null) _context.TicketHistory.Remove(ticketHistory);
 
     await _context.SaveChangesAsync();
+    
     return RedirectToAction(nameof(Index));
   }
 

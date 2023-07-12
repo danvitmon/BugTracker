@@ -12,12 +12,10 @@ public class TicketComment
   [DataType(DataType.DateTime)] public DateTime Created { get; set; }
 
   // Foreign Keys
-  public int TicketId { get; set; }
-
-  [Required] public string? UserId { get; set; }
+             public int     TicketId { get; set; }
+  [Required] public string? UserId   { get; set; }
 
   // Navigation Properties
   public virtual Ticket? Ticket { get; set; }
-
-  public virtual BTUser? User { get; set; }
+  public virtual BTUser? User   { get; set; }
 }

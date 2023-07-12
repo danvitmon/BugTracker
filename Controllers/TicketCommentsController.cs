@@ -1,8 +1,9 @@
-﻿using BugTracker.Data;
-using BugTracker.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
+using BugTracker.Data;
+using BugTracker.Models;
 
 namespace BugTracker.Controllers;
 
@@ -19,19 +20,23 @@ public class TicketCommentsController : Controller
   public async Task<IActionResult> Index()
   {
     var applicationDbContext = _context.TicketComments.Include(t => t.Ticket).Include(t => t.User);
+    
     return View(await applicationDbContext.ToListAsync());
   }
 
   // GET: TicketComments/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.TicketComments == null) return NotFound();
+    if (id == null || _context.TicketComments == null) 
+      return NotFound();
 
     var ticketComment = await _context.TicketComments
       .Include(t => t.Ticket)
       .Include(t => t.User)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (ticketComment == null) return NotFound();
+
+    if (ticketComment == null) 
+      return NotFound();
 
     return View(ticketComment);
   }
@@ -39,8 +44,9 @@ public class TicketCommentsController : Controller
   // GET: TicketComments/Create
   public IActionResult Create()
   {
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description");
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id");
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description");
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id");
+    
     return View();
   }
 
@@ -55,23 +61,28 @@ public class TicketCommentsController : Controller
     {
       _context.Add(ticketComment);
       await _context.SaveChangesAsync();
+      
       return RedirectToAction(nameof(Index));
     }
 
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketComment.UserId);
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketComment.TicketId);
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketComment.UserId);
+    
     return View(ticketComment);
   }
 
   // GET: TicketComments/Edit/5
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null || _context.TicketComments == null) return NotFound();
+    if (id == null || _context.TicketComments == null)
+      return NotFound();
 
     var ticketComment = await _context.TicketComments.FindAsync(id);
     if (ticketComment == null) return NotFound();
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketComment.UserId);
+
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketComment.TicketId);
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketComment.UserId);
+    
     return View(ticketComment);
   }
 
@@ -83,7 +94,8 @@ public class TicketCommentsController : Controller
   public async Task<IActionResult> Edit(int id,
     [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
   {
-    if (id != ticketComment.Id) return NotFound();
+    if (id != ticketComment.Id) 
+      return NotFound();
 
     if (ModelState.IsValid)
     {
@@ -96,27 +108,32 @@ public class TicketCommentsController : Controller
       {
         if (!TicketCommentExists(ticketComment.Id))
           return NotFound();
-        throw;
+        
+          throw;
       }
 
       return RedirectToAction(nameof(Index));
     }
 
-    ViewData["TicketId"] = new SelectList(_context.Tickets, "Id", "Description", ticketComment.TicketId);
-    ViewData["UserId"] = new SelectList(_context.Set<BTUser>(), "Id", "Id", ticketComment.UserId);
+    ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketComment.TicketId);
+    ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketComment.UserId);
+    
     return View(ticketComment);
   }
 
   // GET: TicketComments/Delete/5
   public async Task<IActionResult> Delete(int? id)
   {
-    if (id == null || _context.TicketComments == null) return NotFound();
+    if (id == null || _context.TicketComments == null) 
+      return NotFound();
 
     var ticketComment = await _context.TicketComments
       .Include(t => t.Ticket)
       .Include(t => t.User)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (ticketComment == null) return NotFound();
+
+    if (ticketComment == null) 
+      return NotFound();
 
     return View(ticketComment);
   }
@@ -128,10 +145,12 @@ public class TicketCommentsController : Controller
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
     if (_context.TicketComments == null) return Problem("Entity set 'ApplicationDbContext.TicketComment'  is null.");
+
     var ticketComment = await _context.TicketComments.FindAsync(id);
     if (ticketComment != null) _context.TicketComments.Remove(ticketComment);
 
     await _context.SaveChangesAsync();
+    
     return RedirectToAction(nameof(Index));
   }
 

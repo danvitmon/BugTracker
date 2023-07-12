@@ -1,9 +1,9 @@
 ﻿@using BugTracker.Services.Interfaces
 @using BugTracker.Models.Enums
+
 @model IEnumerable<BugTracker.Models.ViewModels.ManageUserRolesViewModel>
 
 @inject IBTFileService _FileService;
-
 
 <div class="container-fluid">
 
@@ -13,7 +13,6 @@
     </h2>
   </div>
   <!-- end row -->
-
 
   <div class="row">
     @foreach (var viewModel in Model)
@@ -56,7 +55,6 @@
             </div>
           </div>
         </div>
-
 
       </div>
       <!-- end col -->

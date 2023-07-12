@@ -16,6 +16,7 @@ public class MaxFileSizeAttribute : ValidationAttribute
     object? value, ValidationContext validationContext)
   {
     var file = value as IFormFile;
+
     if (file != null)
       if (file.Length > _maxFileSize)
         return new ValidationResult(GetErrorMessage());
@@ -45,6 +46,7 @@ public class AllowedExtensionsAttribute : ValidationAttribute
     object? value, ValidationContext validationContext)
   {
     var file = value as IFormFile;
+
     if (file != null)
     {
       var extension = Path.GetExtension(file.FileName);

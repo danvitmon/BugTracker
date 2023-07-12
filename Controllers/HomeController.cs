@@ -1,35 +1,17 @@
 ﻿using System.Diagnostics;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 using BugTracker.Extensions;
 using BugTracker.Models;
 using BugTracker.Models.ViewModels;
-using BugTracker.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace BugTracker.Controllers;
 
 [Authorize]
 public class HomeController : Controller
 {
-  private readonly IBTCompanyService _companyService;
-  private readonly IBTFileService _fileService;
-  private readonly ILogger<HomeController> _logger;
-  private readonly IBTProjectService _projectService;
-  private readonly IBTRolesService _roleService;
-  private readonly IBTTicketService _ticketService;
-
-  public HomeController(ILogger<HomeController> logger, IBTProjectService projectService,
-    IBTTicketService ticketService, IBTCompanyService companyService, IBTRolesService roleService,
-    IBTFileService fileService)
-  {
-    _logger = logger;
-    _projectService = projectService;
-    _ticketService = ticketService;
-    _companyService = companyService;
-    _roleService = roleService;
-    _fileService = fileService;
-  }
-
   public IActionResult Dashboard()
   {
     var viewmodel = new DashboardViewModel();

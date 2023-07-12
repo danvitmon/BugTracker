@@ -1,37 +1,39 @@
-﻿using BugTracker.Extensions;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+using BugTracker.Extensions;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
 using BugTracker.Models.ViewModels;
 using BugTracker.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BugTracker.Controllers;
 
 [Authorize]
 public class TicketsController : Controller
 {
-  private readonly IBTCompanyService _companyService;
-  private readonly IBTFileService _fileService;
-  private readonly IBTProjectService _projectService;
+  private readonly IBTCompanyService       _companyService;
+  private readonly IBTFileService          _fileService;
+  private readonly IBTProjectService       _projectService;
   private readonly IBTTicketHistoryService _ticketHistoryService;
-  private readonly IBTTicketService _ticketService;
-  private readonly UserManager<BTUser> _userManager;
+  private readonly IBTTicketService        _ticketService;
+  private readonly UserManager<BTUser>     _userManager;
 
-  public TicketsController(UserManager<BTUser> userManager,
-    IBTTicketService ticketService,
-    IBTProjectService projectService,
-    IBTFileService fileService,
-    IBTCompanyService companyService,
+  public TicketsController(
+    UserManager<BTUser>     userManager,
+    IBTTicketService        ticketService,
+    IBTProjectService       projectService,
+    IBTFileService          fileService,
+    IBTCompanyService       companyService,
     IBTTicketHistoryService ticketHistoryService)
   {
-    _userManager = userManager;
-    _ticketService = ticketService;
-    _projectService = projectService;
-    _fileService = fileService;
-    _companyService = companyService;
+    _userManager          = userManager;
+    _ticketService        = ticketService;
+    _projectService       = projectService;
+    _fileService          = fileService;
+    _companyService       = companyService;
     _ticketHistoryService = ticketHistoryService;
   }
 
@@ -41,7 +43,6 @@ public class TicketsController : Controller
   {
     var companyId = User.Identity!.GetCompanyId();
 
-
     return View(await _ticketService.GetTicketsByCompanyIdAsync(companyId));
   }
 
@@ -49,20 +50,20 @@ public class TicketsController : Controller
   [Authorize(Roles = $"{nameof(BTRoles.Admin)}, {nameof(BTRoles.ProjectManager)}")]
   public async Task<IActionResult> AssignDeveloper(int? id)
   {
-    if (id is null or 0) return NotFound();
+    if (id is null or 0) 
+      return NotFound();
 
     var ticket = await _ticketService.GetTicketByIdAsync(id.Value, User.Identity!.GetCompanyId());
 
-    if (ticket == null) return NotFound();
+    if (ticket == null) 
+      return NotFound();
 
-    var developers = await _projectService.GetProjectMembersByRoleAsync(ticket.ProjectId, nameof(BTRoles.Developer),
-      User.Identity!.GetCompanyId());
+    var developers = await _projectService.GetProjectMembersByRoleAsync(ticket.ProjectId, nameof(BTRoles.Developer), User.Identity!.GetCompanyId());
     var currentDev = ticket.DeveloperUser;
-
-    var viewModel = new AssignDeveloperViewModel
+    var viewModel  = new AssignDeveloperViewModel
     {
-      Ticket = ticket,
-      DevId = currentDev?.Id,
+      Ticket  = ticket,
+      DevId   = currentDev?.Id,
       DevList = new SelectList(developers, "Id", "FullName", currentDev?.Id)
     };
 
@@ -94,12 +95,14 @@ public class TicketsController : Controller
   [Authorize]
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null) return NotFound();
+    if (id == null) 
+      return NotFound();
 
     var companyId = User.Identity!.GetCompanyId();
+    var ticket    = await _ticketService.GetTicketByIdAsync(id.Value, companyId);
 
-    var ticket = await _ticketService.GetTicketByIdAsync(id.Value, companyId);
-    if (ticket == null) return NotFound();
+    if (ticket == null) 
+      return NotFound();
 
     return View(ticket);
   }
@@ -108,13 +111,14 @@ public class TicketsController : Controller
   [Authorize]
   public async Task<IActionResult> Create()
   {
-    var projects = await _projectService.GetProjectsByCompanyIdAsync(User.Identity!.GetCompanyId());
+    var projects   = await _projectService.GetProjectsByCompanyIdAsync(User.Identity!.GetCompanyId());
     var priorities = await _ticketService.GetTicketPriorities();
-    var types = await _ticketService.GetTicketTypes();
+    var types      = await _ticketService.GetTicketTypes();
 
-    ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
+    ViewData["ProjectId"]        = new SelectList(projects,   "Id", "Name");
     ViewData["TicketPriorityId"] = new SelectList(priorities, "Id", "Name");
-    ViewData["TicketTypeId"] = new SelectList(types, "Id", "Name");
+    ViewData["TicketTypeId"]     = new SelectList(types,      "Id", "Name");
+    
     return View();
   }
 
@@ -133,7 +137,7 @@ public class TicketsController : Controller
     {
       var companyId = User.Identity!.GetCompanyId();
 
-      ticket.Created = DateTime.UtcNow;
+      ticket.Created         = DateTime.UtcNow;
       ticket.SubmitterUserId = _userManager.GetUserId(User);
 
       await _ticketService.AddTicketAsync(ticket);
@@ -143,12 +147,12 @@ public class TicketsController : Controller
       return RedirectToAction(nameof(Index));
     }
 
-
     var projects = await _projectService.GetProjectsByCompanyIdAsync(User.Identity!.GetCompanyId());
 
-    ViewData["ProjectId"] = new SelectList(projects, "Id", "Name");
+    ViewData["ProjectId"]        = new SelectList(projects,                                   "Id", "Name");
     ViewData["TicketPriorityId"] = new SelectList(await _ticketService.GetTicketPriorities(), "Id", "Name");
-    ViewData["TicketTypeId"] = new SelectList(await _ticketService.GetTicketTypes(), "Id", "Name");
+    ViewData["TicketTypeId"]     = new SelectList(await _ticketService.GetTicketTypes(),      "Id", "Name");
+    
     return View(ticket);
   }
 
@@ -156,18 +160,21 @@ public class TicketsController : Controller
   [Authorize]
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null) return NotFound();
+    if (id == null) 
+      return NotFound();
 
     var ticket = await _ticketService.GetTicketByIdAsync(id.Value, User.Identity!.GetCompanyId());
-    if (ticket == null) return NotFound();
+    if (ticket == null) 
+      return NotFound();
 
     var priorities = await _ticketService.GetTicketPriorities();
     var statuses = await _ticketService.GetTicketStatuses();
     var types = await _ticketService.GetTicketTypes();
 
     ViewData["TicketPriorityId"] = new SelectList(priorities, "Id", "Name");
-    ViewData["TicketStatusId"] = new SelectList(statuses, "Id", "Name");
-    ViewData["TicketTypeId"] = new SelectList(types, "Id", "Name");
+    ViewData["TicketStatusId"]   = new SelectList(statuses,   "Id", "Name");
+    ViewData["TicketTypeId"]     = new SelectList(types,      "Id", "Name");
+    
     return View(ticket);
   }
 
@@ -177,31 +184,33 @@ public class TicketsController : Controller
   [HttpPost]
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> Edit(int id,
-    [Bind(
-      "Id,Title,Description,Created,Updated,Archived,ArchivedByProject,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperUserId,SubmitterUserId")]
+    [Bind("Id,Title,Description,Created,Updated,Archived,ArchivedByProject,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperUserId,SubmitterUserId")]
     Ticket ticket)
   {
-    if (id != ticket.Id) return NotFound();
+    if (id != ticket.Id) 
+      return NotFound();
 
     if (ModelState.IsValid)
     {
-      var oldTicket = await _ticketService.GetTicketAsNoTrackingAsync(ticket.Id, User.Identity!.GetCompanyId());
+      var oldTicket  = await _ticketService.GetTicketAsNoTrackingAsync(ticket.Id, User.Identity!.GetCompanyId());
       ticket.Created = DateTime.UtcNow;
 
       await _ticketService.UpdateTicketAsync(ticket, User.Identity!.GetCompanyId());
       ticket = (await _ticketService.GetTicketByIdAsync(ticket.Id, User.Identity!.GetCompanyId()))!;
 
       await _ticketHistoryService.AddHistoryAsync(oldTicket, ticket, _userManager.GetUserId(User)!);
+      
       return RedirectToAction(nameof(Index));
     }
 
     var priorities = await _ticketService.GetTicketPriorities();
-    var statuses = await _ticketService.GetTicketStatuses();
-    var types = await _ticketService.GetTicketTypes();
+    var statuses   = await _ticketService.GetTicketStatuses();
+    var types      = await _ticketService.GetTicketTypes();
 
     ViewData["TicketPriorityId"] = new SelectList(priorities, "Id", "Name");
-    ViewData["TicketStatusId"] = new SelectList(statuses, "Id", "Name");
-    ViewData["TicketTypeId"] = new SelectList(types, "Id", "Name");
+    ViewData["TicketStatusId"]   = new SelectList(statuses,   "Id", "Name");
+    ViewData["TicketTypeId"]     = new SelectList(types,      "Id", "Name");
+    
     return View(ticket);
   }
 
@@ -209,10 +218,12 @@ public class TicketsController : Controller
   [Authorize]
   public async Task<IActionResult> Archive(int? id)
   {
-    if (id == null) return NotFound();
+    if (id == null) 
+      return NotFound();
 
     var ticket = await _ticketService.GetTicketByIdAsync(id.Value, User.Identity!.GetCompanyId());
-    if (ticket == null) return NotFound();
+    if (ticket == null) 
+      return NotFound();
 
     return View(ticket);
   }
@@ -225,6 +236,7 @@ public class TicketsController : Controller
   public async Task<IActionResult> ArchiveConfirmed(int id)
   {
     var ticket = await _ticketService.GetTicketByIdAsync(id, User.Identity!.GetCompanyId());
+
     if (ticket != null) await _ticketService.ArchiveTicketAsync(ticket, User.Identity!.GetCompanyId());
 
     return RedirectToAction(nameof(Index));
@@ -235,16 +247,17 @@ public class TicketsController : Controller
   {
     var companyId = User.Identity!.GetCompanyId();
 
-
     return View(await _ticketService.GetArchivedTicketsAsync(companyId));
   }
 
   public async Task<IActionResult> Restore(int? id)
   {
-    if (id == null) return NotFound();
+    if (id == null) 
+      return NotFound();
 
     var ticket = await _ticketService.GetTicketByIdAsync(id.Value, User.Identity!.GetCompanyId());
-    if (ticket == null || ticket.ArchivedByProject) return NotFound();
+    if (ticket == null || ticket.ArchivedByProject) 
+      return NotFound();
 
     return View(ticket);
   }
@@ -295,20 +308,16 @@ public class TicketsController : Controller
       ticketAttachment.FileData = await _fileService.ConvertFileToByteArrayAsync(ticketAttachment.FormFile);
       ticketAttachment.FileName = ticketAttachment.FormFile.FileName;
       ticketAttachment.FileType = ticketAttachment.FormFile.ContentType;
-
       ticketAttachment.BTUserId = _userManager.GetUserId(User);
-      ticketAttachment.Created = DateTime.UtcNow;
+      ticketAttachment.Created  = DateTime.UtcNow;
 
       await _ticketService.AddTicketAttachmentAsync(ticketAttachment);
       statusMessage = "Success: New attachment added to Ticket.";
 
-      await _ticketHistoryService.AddHistoryAsync(ticketAttachment.TicketId, nameof(TicketAttachment),
-        ticketAttachment.BTUserId!);
+      await _ticketHistoryService.AddHistoryAsync(ticketAttachment.TicketId, nameof(TicketAttachment), ticketAttachment.BTUserId!);
     }
     else
-    {
       statusMessage = "Error: Invalid data.";
-    }
 
     return RedirectToAction("Details", new { id = ticketAttachment.TicketId, message = statusMessage });
   }
@@ -316,12 +325,15 @@ public class TicketsController : Controller
   public async Task<IActionResult> ShowFile(int id)
   {
     var ticketAttachment = await _ticketService.GetTicketAttachmentByIdAsync(id);
-    if (ticketAttachment == null) return NotFound();
+    if (ticketAttachment == null) 
+      return NotFound();
+
     var fileName = ticketAttachment.FileName!;
     var fileData = ticketAttachment.FileData!;
-    var ext = Path.GetExtension(fileName).Replace(".", "");
+    var ext      = Path.GetExtension(fileName).Replace(".", "");
 
     Response.Headers.Add("Content-Disposition", $"inline; filename={fileName}");
+    
     return File(fileData, $"application/{ext}");
   }
 
@@ -330,7 +342,8 @@ public class TicketsController : Controller
     if (ticketComment is not null && ticketComment.TicketId is not 0 && !string.IsNullOrEmpty(ticketComment.Comment))
     {
       var ticket = await _ticketService.GetTicketByIdAsync(ticketComment.TicketId, User.Identity!.GetCompanyId());
-      if (ticket is null) return NotFound();
+      if (ticket is null) 
+        return NotFound();
 
       var userId = _userManager.GetUserId(User);
 
@@ -340,7 +353,7 @@ public class TicketsController : Controller
           || ticket.SubmitterUserId == userId)
       {
         ticketComment.Created = DateTime.UtcNow;
-        ticketComment.UserId = userId;
+        ticketComment.UserId  = userId;
 
         await _ticketService.AddTicketCommentAsync(ticketComment);
 

@@ -65,6 +65,7 @@ public class ChangePasswordModel : PageModel
     if (!changePasswordResult.Succeeded)
     {
       foreach (var error in changePasswordResult.Errors) ModelState.AddModelError(string.Empty, error.Description);
+      
       return Page();
     }
 

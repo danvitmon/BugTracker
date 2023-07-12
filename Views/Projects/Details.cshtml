@@ -1,18 +1,18 @@
-﻿﻿﻿@using BugTracker.Models.Enums;
+﻿@using Microsoft.AspNetCore.Identity
+
+﻿﻿@using BugTracker.Models.Enums;
 @using BugTracker.Services.Interfaces
-@using Microsoft.AspNetCore.Identity
+
 @model Project
 
-@inject IBTRolesService _rolesService
-@inject IBTProjectService _projectService;
+@inject IBTRolesService     _rolesService
+@inject IBTProjectService   _projectService;
 @inject UserManager<BTUser> UserManager;
-
 
 @{
   ViewData["Title"] = "Details";
 
 }
-
 
 <div class="p-3 d-flex flex-column">
 
@@ -140,35 +140,6 @@
           </div>
         </div>
       </div>
-      @*<div class="row p-1">
-					<h1 class="header-title mb-4">Project Details</h1>
-					<div class="table-responsive mt-4">
-						<table class="table table-hover table-bordered text-center no-wrap" id="datatable">
-							<thead>
-								<tr>
-									<th><h5>---</h5></th>
-									<th><h5>Title</h5></th>
-								</tr>
-							</thead>
-							@foreach (Ticket ticket in Model.Tickets)
-							{
-								<tbody>
-									<tr>
-										<td>
-											<a class="btn btn-sm btn-soft-success" asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">Edit</a>
-											@foreach (BTUser user in (await _rolesService.GetUsersInRoleAsync(nameof(BTRoles.Developer), Model.CompanyId)))
-											{
-
-											}
-										</td>
-										<td>@ticket.Title</td>
-
-									</tr>
-								</tbody>
-							}
-						</table>
-					</div>
-				</div>*@
     </div>
     <!-- end card-->
   </div>
@@ -201,26 +172,6 @@
             </td>
             <td>@ticket.Title</td>
             @*Priority*@
-            @*<td>
-									@if (ticket.TicketPriority!.Name == "Urgent")
-									{
-										<h5 style="color:firebrick">Urgent</h5>
-									}
-									else if (ticket.TicketPriority!.Name == "High")
-									{
-										<h5 style="color:orangered">High</h5>
-
-									}
-									else if (ticket.TicketPriority!.Name == "Medium")
-									{
-										<h5 style="color:darkslateblue">Medium</h5>
-									}
-									else if (ticket.TicketPriority!.Name == "Low")
-									{
-										<h5 style="color:forestgreen">Low</h5>
-									}
-
-								</td>*@
 
           </tr>
           </tbody>
@@ -232,7 +183,8 @@
 
 </div>
 
-@section Scripts{
+@section Scripts
+{
   <script>
 		$('#datatable').DataTable();
 	</script>

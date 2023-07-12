@@ -1,26 +1,28 @@
-﻿using BugTracker.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
+using BugTracker.Data;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
 using BugTracker.Services.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace BugTracker.Services;
 
 public class BTRolesService : IBTRolesService
 {
   private readonly ApplicationDbContext _context;
-  private readonly UserManager<BTUser> _userManager;
+  private readonly UserManager<BTUser>  _userManager;
 
   public BTRolesService(UserManager<BTUser> userManager, ApplicationDbContext context)
   {
     _userManager = userManager;
-    _context = context;
+    _context     = context;
   }
 
   public async Task<bool> AddUserToRoleAsync(BTUser user, string roleName)
   {
     var result = (await _userManager.AddToRoleAsync(user, roleName)).Succeeded;
+    
     return result;
   }
 
@@ -49,12 +51,14 @@ public class BTRolesService : IBTRolesService
   public async Task<bool> RemoveUserFromRoleAsync(BTUser user, string roleName)
   {
     var result = (await _userManager.RemoveFromRoleAsync(user, roleName)).Succeeded;
+    
     return result;
   }
 
   public async Task<bool> RemoveUserFromRolesAsync(BTUser user, IEnumerable<string> roleNames)
   {
     var result = (await _userManager.RemoveFromRolesAsync(user, roleNames)).Succeeded;
+    
     return result;
   }
 }

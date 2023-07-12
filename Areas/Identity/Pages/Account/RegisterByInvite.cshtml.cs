@@ -1,14 +1,9 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-#nullable disable
+﻿#nullable disable
 
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
-using BugTracker.Models;
-using BugTracker.Models.Enums;
-using BugTracker.Services.Interfaces;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -16,35 +11,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
+using BugTracker.Models;
+using BugTracker.Models.Enums;
+using BugTracker.Services.Interfaces;
+
 namespace BugTracker.Areas.Identity.Pages.Account;
 
 public class RegisterByInviteModel : PageModel
 {
-  private readonly IEmailSender _emailSender;
-  private readonly IUserEmailStore<BTUser> _emailStore;
-  private readonly IBTInviteService _inviteService;
+  private readonly IEmailSender                   _emailSender;
+  private readonly IUserEmailStore<BTUser>        _emailStore;
+  private readonly IBTInviteService               _inviteService;
   private readonly ILogger<RegisterByInviteModel> _logger;
-  private readonly IBTProjectService _projectService;
-  private readonly SignInManager<BTUser> _signInManager;
-  private readonly UserManager<BTUser> _userManager;
-  private readonly IUserStore<BTUser> _userStore;
+  private readonly IBTProjectService              _projectService;
+  private readonly SignInManager<BTUser>          _signInManager;
+  private readonly UserManager<BTUser>            _userManager;
+  private readonly IUserStore<BTUser>             _userStore;
 
   public RegisterByInviteModel(
-    UserManager<BTUser> userManager,
-    IUserStore<BTUser> userStore,
-    SignInManager<BTUser> signInManager,
+    UserManager<BTUser>            userManager,
+    IUserStore<BTUser>             userStore,
+    SignInManager<BTUser>          signInManager,
     ILogger<RegisterByInviteModel> logger,
-    IEmailSender emailSender,
-    IBTInviteService inviteService,
-    IBTProjectService projectService)
+    IEmailSender                   emailSender,
+    IBTInviteService               inviteService,
+    IBTProjectService              projectService)
   {
-    _userManager = userManager;
-    _userStore = userStore;
-    _emailStore = GetEmailStore();
-    _signInManager = signInManager;
-    _logger = logger;
-    _emailSender = emailSender;
-    _inviteService = inviteService;
+    _userManager    = userManager;
+    _userStore      = userStore;
+    _emailStore     = GetEmailStore();
+    _signInManager  = signInManager;
+    _logger         = logger;
+    _emailSender    = emailSender;
+    _inviteService  = inviteService;
     _projectService = projectService;
   }
 
@@ -77,12 +76,12 @@ public class RegisterByInviteModel : PageModel
 
     Input = new InputModel();
 
-    Input.Email = invite.InviteeEmail;
+    Input.Email     = invite.InviteeEmail;
     Input.FirstName = invite.InviteeFirstName;
-    Input.LastName = invite.InviteeLastName;
-    Input.Company = invite.Company.Name;
+    Input.LastName  = invite.InviteeLastName;
+    Input.Company   = invite.Company.Name;
     Input.CompanyId = invite.CompanyId;
-    Input.Token = token;
+    Input.Token     = token;
   }
 
   public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -100,8 +99,8 @@ public class RegisterByInviteModel : PageModel
       BTUser user = new()
       {
         FirstName = Input.FirstName,
-        LastName = Input.LastName,
-        Email = invite.InviteeEmail,
+        LastName  = Input.LastName,
+        Email     = invite.InviteeEmail,
         CompanyId = invite.CompanyId
       };
 
@@ -118,14 +117,10 @@ public class RegisterByInviteModel : PageModel
 
         _logger.LogInformation("User created a new account with password.");
 
-        var userId = await _userManager.GetUserIdAsync(user);
-        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-        var callbackUrl = Url.Page(
-          "/Account/ConfirmEmail",
-          null,
-          new { area = "Identity", userId, code, returnUrl },
-          Request.Scheme);
+        var userId      = await _userManager.GetUserIdAsync(user);
+        var code        = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        code            = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = Url.Page("/Account/ConfirmEmail", null, new { area = "Identity", userId, code, returnUrl }, Request.Scheme);
 
         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
           $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
@@ -136,6 +131,7 @@ public class RegisterByInviteModel : PageModel
         }
 
         await _signInManager.SignInAsync(user, false);
+        
         return LocalRedirect(returnUrl);
       }
 
@@ -150,7 +146,8 @@ public class RegisterByInviteModel : PageModel
   {
     if (!_userManager.SupportsUserEmail)
       throw new NotSupportedException("The default UI requires a user store with email support.");
-    return (IUserEmailStore<BTUser>)_userStore;
+    
+      return (IUserEmailStore<BTUser>)_userStore;
   }
 
   /// <summary>

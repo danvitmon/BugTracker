@@ -18,13 +18,10 @@ public class Company
   [NotMapped] public IFormFile? ImageFormFile { get; set; }
 
   public byte[]? ImageFileData { get; set; }
-
   public string? ImageFileType { get; set; }
 
   // Navigation Properties
   public virtual ICollection<Project> Projects { get; set; } = new HashSet<Project>();
-
-  public virtual ICollection<BTUser> Members { get; set; } = new HashSet<BTUser>();
-
-  public virtual ICollection<Invite> Invites { get; set; } = new HashSet<Invite>();
+  public virtual ICollection<BTUser>  Members  { get; set; } = new HashSet<BTUser>();
+  public virtual ICollection<Invite>  Invites  { get; set; } = new HashSet<Invite>();
 }
