@@ -3,10 +3,10 @@
 
 @model BugTracker.Models.Project
 
-@inject IBTFileService _BTFileService
+@inject IBTFileService BtFileService
 
 @{
-  ViewData["Title"] = "Edit";
+   ViewData["Title"] = "Edit";
 }
 
 <h1>Edit</h1>
@@ -49,7 +49,7 @@
         <select asp-for="ProjectPriorityId" class="form-control" asp-items="ViewBag.ProjectPriorityId"></select>
       </div>
       <div class="form-group">
-        <img src="@_BTFileService.ConvertByteArrayToFile(Model.ImageFileData, Model.ImageFileType, DefaultImage.ProjectImage)" class="img-fluid" id="projectImage"/>
+        <img src="@BtFileService.ConvertByteArrayToFile(Model.ImageFileData, Model.ImageFileType, DefaultImage.ProjectImage)" class="img-fluid" id="projectImage"/>
 
         <label asp-for="ImageFormFile" class="control-label">Project Image</label>
         <input asp-for="ImageFormFile" class="form-control"

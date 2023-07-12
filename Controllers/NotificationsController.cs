@@ -11,16 +11,15 @@ public class NotificationsController : Controller
 {
   private readonly ApplicationDbContext _context;
 
-  public NotificationsController(ApplicationDbContext context)
-  {
-    _context = context;
-  }
+  public NotificationsController(ApplicationDbContext context) => _context = context;
 
   // GET: Notifications
   public async Task<IActionResult> Index()
   {
     var applicationDbContext = _context.Notifications /*.Include(n => n.NotificationType)*/.Include(n => n.Project)
-      .Include(n => n.Recipient).Include(n => n.Sender).Include(n => n.Ticket);
+      .Include(n => n.Recipient)
+      .Include(n => n.Sender)
+      .Include(n => n.Ticket);
     
       return View(await applicationDbContext.ToListAsync());
   }
@@ -28,7 +27,7 @@ public class NotificationsController : Controller
   // GET: Notifications/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.Notifications == null) 
+    if (id == null) 
       return NotFound();
 
     var notification = await _context.Notifications
@@ -61,9 +60,7 @@ public class NotificationsController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create(
-    [Bind("Id,ProjectId,TicketId,SenderId,RecipientId,NotificationTypeId,Title,Message,Created,HasBeenViewed")]
-    Notification notification)
+  public async Task<IActionResult> Create([Bind("Id,ProjectId,TicketId,SenderId,RecipientId,NotificationTypeId,Title,Message,Created,HasBeenViewed")] Notification notification)
   {
     if (ModelState.IsValid)
     {
@@ -84,10 +81,13 @@ public class NotificationsController : Controller
   // GET: Notifications/Edit/5
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null || _context.Notifications == null) return NotFound();
+    if (id == null) 
+      return NotFound();
 
     var notification = await _context.Notifications.FindAsync(id);
-    if (notification == null) return NotFound();
+    if (notification == null) 
+      return NotFound();
+
     ViewData["ProjectId"]   = new SelectList(_context.Set<Project>(), "Id", "Description", notification.ProjectId);
     ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.RecipientId);
     ViewData["SenderId"]    = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.SenderId);
@@ -101,11 +101,10 @@ public class NotificationsController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Edit(int id,
-    [Bind("Id,ProjectId,TicketId,SenderId,RecipientId,NotificationTypeId,Title,Message,Created,HasBeenViewed")]
-    Notification notification)
+  public async Task<IActionResult> Edit(int id, [Bind("Id,ProjectId,TicketId,SenderId,RecipientId,NotificationTypeId,Title,Message,Created,HasBeenViewed")] Notification notification)
   {
-    if (id != notification.Id) return NotFound();
+    if (id != notification.Id) 
+      return NotFound();
 
     if (ModelState.IsValid)
     {
@@ -119,7 +118,7 @@ public class NotificationsController : Controller
         if (!NotificationExists(notification.Id))
           return NotFound();
         
-          throw;
+        throw;
       }
 
       return RedirectToAction(nameof(Index));
@@ -130,13 +129,14 @@ public class NotificationsController : Controller
     ViewData["RecipientId"] = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.RecipientId);
     ViewData["SenderId"]    = new SelectList(_context.Set<BTUser>(),  "Id", "Id",          notification.SenderId);
     ViewData["TicketId"]    = new SelectList(_context.Set<Ticket>(),  "Id", "Description", notification.TicketId);
+
     return View(notification);
   }
 
   // GET: Notifications/Delete/5
   public async Task<IActionResult> Delete(int? id)
   {
-    if (id == null || _context.Notifications == null) 
+    if (id == null) 
       return NotFound();
 
     var notification = await _context.Notifications
@@ -146,6 +146,7 @@ public class NotificationsController : Controller
       .Include(n => n.Sender)
       .Include(n => n.Ticket)
       .FirstOrDefaultAsync(m => m.Id == id);
+
     if (notification == null) 
       return NotFound();
 
@@ -158,18 +159,14 @@ public class NotificationsController : Controller
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
-    if (_context.Notifications == null) 
-      return Problem("Entity set 'ApplicationDbContext.Notification'  is null.");
     var notification = await _context.Notifications.FindAsync(id);
-    if (notification != null) _context.Notifications.Remove(notification);
+    if (notification != null) 
+      _context.Notifications.Remove(notification);
 
     await _context.SaveChangesAsync();
     
     return RedirectToAction(nameof(Index));
   }
 
-  private bool NotificationExists(int id)
-  {
-    return (_context.Notifications?.Any(e => e.Id == id)).GetValueOrDefault();
-  }
+  private bool NotificationExists(int id) => (_context.Notifications?.Any(e => e.Id == id)).GetValueOrDefault();
 }

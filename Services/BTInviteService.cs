@@ -10,10 +10,7 @@ public class BTInviteService : IBTInviteService
 {
   private readonly ApplicationDbContext _context;
 
-  public BTInviteService(ApplicationDbContext context)
-  {
-    _context = context;
-  }
+  public BTInviteService(ApplicationDbContext context) => _context = context;
 
   public async Task<bool> AcceptInviteAsync(Guid? token, string userId, int companyId)
   {
@@ -22,7 +19,7 @@ public class BTInviteService : IBTInviteService
       var invite = await _context.Invites
         .FirstOrDefaultAsync(i => i.CompanyToken == token
                                   && i.CompanyId == companyId
-                                  && i.IsValid == true);
+                                  && i.IsValid);
 
       if (invite == null) 
         return false;
@@ -36,8 +33,6 @@ public class BTInviteService : IBTInviteService
     catch (Exception)
     {
       return false;
-      
-      throw;
     }
   }
 
@@ -49,8 +44,8 @@ public class BTInviteService : IBTInviteService
 
   public async Task<bool> AnyInviteAsync(Guid token, string email, int companyId)
   {
-    var result = await _context.Invites.Where(i => i.CompanyId == companyId)
-      .AnyAsync(i => i.CompanyToken == token && i.InviteeEmail == email);
+    var result = await _context.Invites.Where   (i => i.CompanyId    == companyId)
+                                       .AnyAsync(i => i.CompanyToken == token && i.InviteeEmail == email);
 
     return result;
   }
@@ -103,16 +98,15 @@ public class BTInviteService : IBTInviteService
       return false;
 
     var result = false;
-
     var invite = await _context.Invites.FirstOrDefaultAsync(i => i.CompanyToken == token);
 
     if (invite != null)
     {
       var inviteDate = invite.InviteDate;
-
       var notExpired = (DateTime.UtcNow - inviteDate).TotalDays <= 7;
 
-      if (notExpired) result = invite.IsValid;
+      if (notExpired) 
+        result = invite.IsValid;
     }
 
     return result;

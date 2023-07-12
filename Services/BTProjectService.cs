@@ -41,27 +41,42 @@ public class BTProjectService : IBTProjectService
 
   public async Task<List<Project>> GetProjectsByCompanyIdAsync(int companyId)
   {
-    return await _context.Projects.Where(p => p.CompanyId == companyId).Include(p => p.Tickets)
-      .Include(p => p.ProjectPriority).Include(p => p.Members).ToListAsync();
+    return await _context.Projects
+      .Where  (p => p.CompanyId == companyId)
+      .Include(p => p.Tickets)
+      .Include(p => p.ProjectPriority)
+      .Include(p => p.Members)
+      .ToListAsync();
   }
 
   public async Task<List<Project>> GetProjectsByPriorityAsync(int companyId, string priority)
   {
-    return await _context.Projects.Include(p => p.ProjectPriority)
+    return await _context.Projects
+      .Include(p => p.ProjectPriority)
       .Where  (p => p.CompanyId == companyId && !p.Archived && string.Equals(p.ProjectPriority!.Name, priority))
-      .Include(p => p.Tickets).Include(p => p.Members).ToListAsync();
+      .Include(p => p.Tickets)
+      .Include(p => p.Members)
+      .ToListAsync();
   }
 
   public async Task<List<Project>> GetUserProjectsAsync(string userId)
   {
-    return await _context.Projects.Include(p => p.Members).Where(p => p.Members.Any(u => u.Id == userId) && !p.Archived)
-      .Include(p => p.Tickets).Include(p => p.ProjectPriority).ToListAsync();
+    return await _context.Projects
+      .Include(p => p.Members)
+      .Where  (p => p.Members.Any(u => u.Id == userId) && !p.Archived)
+      .Include(p => p.Tickets)
+      .Include(p => p.ProjectPriority)
+      .ToListAsync();
   }
 
   public async Task<List<Project>> GetArchivedProjectsAsync(int companyId)
   {
-    return await _context.Projects.Where(p => p.CompanyId == companyId && p.Archived).Include(p => p.Tickets)
-      .Include(p => p.ProjectPriority).Include(p => p.Members).ToListAsync();
+    return await _context.Projects
+      .Where  (p => p.CompanyId == companyId && p.Archived)
+      .Include(p => p.Tickets)
+      .Include(p => p.ProjectPriority)
+      .Include(p => p.Members)
+      .ToListAsync();
   }
 
   public async Task<Project?> GetProjectByIdAsync(int projectId, int companyId)
@@ -84,12 +99,14 @@ public class BTProjectService : IBTProjectService
 
   public async Task<List<Project>> GetUnassignedProjectsAsync(int companyId)
   {
-    var projects = await GetProjectsByCompanyIdAsync(companyId);
+    var           projects   = await GetProjectsByCompanyIdAsync(companyId);
     List<Project> unassigned = new();
+
     foreach (var project in projects)
     {
       var pm = await GetProjectManagerAsync(project.Id, companyId);
-      if (pm is null) unassigned.Add(project);
+      if (pm is null) 
+        unassigned.Add(project);
     }
 
     return unassigned;
@@ -137,7 +154,8 @@ public class BTProjectService : IBTProjectService
 
   public async Task<bool> AddProjectManagerAsync(string userId, int projectId, int companyId)
   {
-    var project = await _context.Projects.Include(p => p.Members)
+    var project = await _context.Projects
+      .Include            (p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
     var projectManager = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId && u.CompanyId == companyId);
@@ -159,7 +177,8 @@ public class BTProjectService : IBTProjectService
 
   public async Task RemoveProjectManagerAsync(int projectId, int companyId)
   {
-    var project = await _context.Projects.Include(p => p.Members)
+    var project = await _context.Projects
+      .Include            (p => p.Members)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
     if (project is not null)
@@ -181,14 +200,14 @@ public class BTProjectService : IBTProjectService
 
     if (project is not null)
     {
-      var members = project.Members.ToList();
-      List<BTUser> rolemembers = new();
+      var          members     = project.Members.ToList();
+      List<BTUser> roleMembers = new();
 
       foreach (var member in members)
         if (await _rolesService.IsUserInRole(member, roleName))
-          rolemembers.Add(member);
+          roleMembers.Add(member);
       
-          return rolemembers;
+      return roleMembers;
     }
 
     return new List<BTUser>();
@@ -230,6 +249,7 @@ public class BTProjectService : IBTProjectService
     return false;
   }
 
+  // Keep it for future extension
   public async Task<List<Project>> GetUnassignedProjectsByCompanyIdAsync(int companyId)
   {
     var allProjects = await GetProjectsByCompanyIdAsync(companyId);
@@ -238,7 +258,8 @@ public class BTProjectService : IBTProjectService
     foreach (var project in allProjects)
     {
       var projectManager = await GetProjectManagerAsync(project.Id, companyId);
-      if (projectManager is null) unassignedProjects.Add(project);
+      if (projectManager is null) 
+        unassignedProjects.Add(project);
     }
 
     return unassignedProjects;

@@ -3,9 +3,7 @@
 
 @model IEnumerable<BugTracker.Models.Project>
 
-@inject IBTFileService    _fileService;
-@inject IBTProjectService _projectService;
-@inject IBTRolesService   _rolesService;
+@inject IBTFileService    FileService;
 
 @{
   ViewData["Title"] = "Unassigned Projects";
@@ -137,7 +135,7 @@
               <div class="col-12 col-lg-4">
                 <div class="form-group">
                   <label asp-for="@project.ImageFormFile" class="control-label">Project Image</label>
-                  <img class="img-fluid border rounded-3 mb-2" style="max-height: 350px;" src="@_fileService.ConvertByteArrayToFile(project.ImageFileData, project.ImageFileType, DefaultImage.ProjectImage)" id="blogImage">
+                  <img class="img-fluid border rounded-3 mb-2" style="max-height: 350px;" src="@FileService.ConvertByteArrayToFile(project.ImageFileData, project.ImageFileType, DefaultImage.ProjectImage)" id="blogImage">
                   <input asp-for="@project.ImageFormFile" type="file" class="form-control mt-3 pt-2" accept=".png,.jpg,.jpeg,.gif"
                          onchange="document.getElementById('blogImage').src = window.URL.createObjectURL(this.files[0])"/>
                 </div>

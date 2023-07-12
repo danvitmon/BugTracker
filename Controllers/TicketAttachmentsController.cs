@@ -11,10 +11,7 @@ public class TicketAttachmentsController : Controller
 {
   private readonly ApplicationDbContext _context;
 
-  public TicketAttachmentsController(ApplicationDbContext context)
-  {
-    _context = context;
-  }
+  public TicketAttachmentsController(ApplicationDbContext context) => _context = context;
 
   // GET: TicketAttachments
   public async Task<IActionResult> Index()
@@ -27,14 +24,16 @@ public class TicketAttachmentsController : Controller
   // GET: TicketAttachments/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.TicketAttachments == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketAttachment = await _context.TicketAttachments
       .Include(t => t.Ticket)
       .Include(t => t.BTUser)
       .FirstOrDefaultAsync(m => m.Id == id);
-    if (ticketAttachment == null) return NotFound();
+    
+    if (ticketAttachment == null) 
+      return NotFound();
 
     return View(ticketAttachment);
   }
@@ -53,8 +52,7 @@ public class TicketAttachmentsController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create(
-    [Bind("Id,Description,Created,TicketId,UserId,FileData,FileType")] TicketAttachment ticketAttachment)
+  public async Task<IActionResult> Create([Bind("Id,Description,Created,TicketId,UserId,FileData,FileType")] TicketAttachment ticketAttachment)
   {
     if (ModelState.IsValid)
     {
@@ -73,7 +71,7 @@ public class TicketAttachmentsController : Controller
   // GET: TicketAttachments/Edit/5
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null || _context.TicketAttachments == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketAttachment = await _context.TicketAttachments.FindAsync(id);
@@ -91,8 +89,7 @@ public class TicketAttachmentsController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Edit(int id,
-    [Bind("Id,Description,Created,TicketId,UserId,FileData,FileType")] TicketAttachment ticketAttachment)
+  public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Created,TicketId,UserId,FileData,FileType")] TicketAttachment ticketAttachment)
   {
     if (id != ticketAttachment.Id) 
       return NotFound();
@@ -109,7 +106,7 @@ public class TicketAttachmentsController : Controller
         if (!TicketAttachmentExists(ticketAttachment.Id))
           return NotFound();
         
-          throw;
+        throw;
       }
 
       return RedirectToAction(nameof(Index));
@@ -124,7 +121,7 @@ public class TicketAttachmentsController : Controller
   // GET: TicketAttachments/Delete/5
   public async Task<IActionResult> Delete(int? id)
   {
-    if (id == null || _context.TicketAttachments == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketAttachment = await _context.TicketAttachments
@@ -144,9 +141,6 @@ public class TicketAttachmentsController : Controller
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
-    if (_context.TicketAttachments == null)
-      return Problem("Entity set 'ApplicationDbContext.TicketAttachment'  is null.");
-
     var ticketAttachment = await _context.TicketAttachments.FindAsync(id);
     if (ticketAttachment != null) _context.TicketAttachments.Remove(ticketAttachment);
 
@@ -155,8 +149,5 @@ public class TicketAttachmentsController : Controller
     return RedirectToAction(nameof(Index));
   }
 
-  private bool TicketAttachmentExists(int id)
-  {
-    return (_context.TicketAttachments?.Any(e => e.Id == id)).GetValueOrDefault();
-  }
+  private bool TicketAttachmentExists(int id) => (_context.TicketAttachments?.Any(e => e.Id == id)).GetValueOrDefault();
 }

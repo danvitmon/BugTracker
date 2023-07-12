@@ -11,10 +11,7 @@ public class TicketCommentsController : Controller
 {
   private readonly ApplicationDbContext _context;
 
-  public TicketCommentsController(ApplicationDbContext context)
-  {
-    _context = context;
-  }
+  public TicketCommentsController(ApplicationDbContext context) => _context = context;
 
   // GET: TicketComments
   public async Task<IActionResult> Index()
@@ -27,7 +24,7 @@ public class TicketCommentsController : Controller
   // GET: TicketComments/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.TicketComments == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketComment = await _context.TicketComments
@@ -74,11 +71,12 @@ public class TicketCommentsController : Controller
   // GET: TicketComments/Edit/5
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null || _context.TicketComments == null)
+    if (id == null)
       return NotFound();
 
     var ticketComment = await _context.TicketComments.FindAsync(id);
-    if (ticketComment == null) return NotFound();
+    if (ticketComment == null) 
+      return NotFound();
 
     ViewData["TicketId"] = new SelectList(_context.Tickets,       "Id", "Description", ticketComment.TicketId);
     ViewData["UserId"]   = new SelectList(_context.Set<BTUser>(), "Id", "Id",          ticketComment.UserId);
@@ -91,8 +89,7 @@ public class TicketCommentsController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Edit(int id,
-    [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
+  public async Task<IActionResult> Edit(int id, [Bind("Id,Comment,Created,TicketId,UserId")] TicketComment ticketComment)
   {
     if (id != ticketComment.Id) 
       return NotFound();
@@ -109,7 +106,7 @@ public class TicketCommentsController : Controller
         if (!TicketCommentExists(ticketComment.Id))
           return NotFound();
         
-          throw;
+        throw;
       }
 
       return RedirectToAction(nameof(Index));
@@ -144,18 +141,14 @@ public class TicketCommentsController : Controller
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
-    if (_context.TicketComments == null) return Problem("Entity set 'ApplicationDbContext.TicketComment'  is null.");
-
     var ticketComment = await _context.TicketComments.FindAsync(id);
-    if (ticketComment != null) _context.TicketComments.Remove(ticketComment);
+    if (ticketComment != null) 
+      _context.TicketComments.Remove(ticketComment);
 
     await _context.SaveChangesAsync();
     
     return RedirectToAction(nameof(Index));
   }
 
-  private bool TicketCommentExists(int id)
-  {
-    return (_context.TicketComments?.Any(e => e.Id == id)).GetValueOrDefault();
-  }
+  private bool TicketCommentExists(int id) => (_context.TicketComments?.Any(e => e.Id == id)).GetValueOrDefault();
 }

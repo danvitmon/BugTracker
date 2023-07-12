@@ -15,29 +15,25 @@ namespace BugTracker.Controllers;
 [Authorize(Roles = nameof(BTRoles.Admin))]
 public class InvitesController : Controller
 {
-  private readonly IBTCompanyService   _companyService;
   private readonly IEmailSender        _emailSender;
   private readonly IBTInviteService    _inviteService;
   private readonly IBTProjectService   _projectService;
   private readonly IDataProtector      _protector;
-  private readonly string              _protectorPurpose;
   private readonly UserManager<BTUser> _userManager;
 
-  public InvitesController(
-    IBTInviteService        inviteService,
-    IBTProjectService       projectService,
-    IBTCompanyService       companyService,
-    IEmailSender            emailSender,
-    UserManager<BTUser>     userManager,
-    IDataProtectionProvider protectionProvider)
+  public InvitesController(IBTInviteService        inviteService,
+                           IBTProjectService       projectService,
+                           IEmailSender            emailSender,
+                           UserManager<BTUser>     userManager,
+                           IDataProtectionProvider protectionProvider)
   {
     _projectService   = projectService;
-    _companyService   = companyService;
     _emailSender      = emailSender;
     _userManager      = userManager;
     _inviteService    = inviteService;
-    _protectorPurpose = "Blackjack/21";
-    _protector        = protectionProvider.CreateProtector(_protectorPurpose);
+
+    var protectorPurpose = "Blackjack/21";
+    _protector        = protectionProvider.CreateProtector(protectorPurpose);
   }
 
   // GET: Invites/Create
@@ -55,14 +51,14 @@ public class InvitesController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create(
-    [Bind("ProjectId,InviteeEmail,InviteeFirstName,InviteeLastName,Message")] Invite invite)
+  public async Task<IActionResult> Create([Bind("ProjectId,InviteeEmail,InviteeFirstName,InviteeLastName,Message")] Invite invite)
   {
     var companyId = User.Identity!.GetCompanyId();
 
     ModelState.Remove(nameof(Invite.InvitorId));
 
     if (ModelState.IsValid)
+    {
       // assign invite values
       // save it
       // send the invite email
@@ -86,6 +82,7 @@ public class InvitesController : Controller
       await _emailSender.SendEmailAsync(invite.InviteeEmail!, subject, body);
 
       return RedirectToAction("Index", "Home", new { SwalMessage = "Invite Sent!" });
+    }
 
     var companyProjects   = await _projectService.GetProjectsByCompanyIdAsync(User.Identity!.GetCompanyId());
     ViewData["ProjectId"] = new SelectList(companyProjects, "Id", "Name");
@@ -96,14 +93,16 @@ public class InvitesController : Controller
   [AllowAnonymous]
   public async Task<IActionResult> ProcessInvite(string? token, string? email, string? company)
   {
-    if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(company)) return NotFound();
+    if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(company)) 
+      return NotFound();
 
     var companyToken = Guid.Parse(_protector.Unprotect(token));
     var inviteeEmail = _protector.Unprotect(email);
     var companyId    = int.Parse(_protector.Unprotect(company));
     var invite       = await _inviteService.GetInviteAsync(companyToken, inviteeEmail, companyId);
 
-    if (invite == null) return NotFound();
+    if (invite == null) 
+      return NotFound();
 
     return View(invite);
   }

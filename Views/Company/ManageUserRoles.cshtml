@@ -3,7 +3,7 @@
 
 @model IEnumerable<BugTracker.Models.ViewModels.ManageUserRolesViewModel>
 
-@inject IBTFileService _FileService;
+@inject IBTFileService FileService;
 
 <div class="container-fluid">
 
@@ -21,7 +21,7 @@
         <div class="card">
           <div class="text-center card-body">
             <div>
-              <img src="@_FileService.ConvertByteArrayToFile(viewModel.User!.ImageFileData, viewModel.User!.ImageFileType, DefaultImage.BTUserImage)" class="rounded-circle avatar-xl img-thumbnail mb-2" alt="profile-image">
+              <img src="@FileService.ConvertByteArrayToFile(viewModel.User!.ImageFileData, viewModel.User!.ImageFileType, DefaultImage.BTUserImage)" class="rounded-circle avatar-xl img-thumbnail mb-2" alt="profile-image">
 
               <p class="text-muted font-13 mb-3">
                 Hello! I'm @viewModel.User.FirstName.

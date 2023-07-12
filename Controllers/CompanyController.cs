@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-using BugTracker.Data;
 using BugTracker.Extensions;
 using BugTracker.Models;
 using BugTracker.Models.Enums;
@@ -15,9 +14,9 @@ namespace BugTracker.Controllers;
 [Authorize]
 public class CompanyController : Controller
 {
-  private readonly IBTCompanyService    _companyService;
-  private readonly IBTRolesService      _rolesService;
-  private readonly UserManager<BTUser>  _userManager;
+  private readonly IBTCompanyService   _companyService;
+  private readonly IBTRolesService     _rolesService;
+  private readonly UserManager<BTUser> _userManager;
 
   public CompanyController(IBTCompanyService companyService, IBTRolesService rolesService, UserManager<BTUser> userManager)
   {
@@ -42,7 +41,7 @@ public class CompanyController : Controller
   [Authorize(Roles = nameof(BTRoles.Admin))]
   public async Task<IActionResult> ManageUserRoles()
   {
-    var members = await _companyService.GetCompanyMembersAsync(User.Identity!.GetCompanyId());
+    var members = await _companyService.GetUsersByCompanyIdAsync(User.Identity!.GetCompanyId());
     var roles   = await _rolesService.GetRolesAsync();
 
     List<ManageUserRolesViewModel> model = new();

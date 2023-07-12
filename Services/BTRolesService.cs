@@ -21,9 +21,7 @@ public class BTRolesService : IBTRolesService
 
   public async Task<bool> AddUserToRoleAsync(BTUser user, string roleName)
   {
-    var result = (await _userManager.AddToRoleAsync(user, roleName)).Succeeded;
-    
-    return result;
+    return (await _userManager.AddToRoleAsync(user, roleName)).Succeeded;
   }
 
   public async Task<List<IdentityRole>> GetRolesAsync()
@@ -50,15 +48,11 @@ public class BTRolesService : IBTRolesService
 
   public async Task<bool> RemoveUserFromRoleAsync(BTUser user, string roleName)
   {
-    var result = (await _userManager.RemoveFromRoleAsync(user, roleName)).Succeeded;
-    
-    return result;
+    return (await _userManager.RemoveFromRoleAsync(user, roleName)).Succeeded;
   }
 
   public async Task<bool> RemoveUserFromRolesAsync(BTUser user, IEnumerable<string> roleNames)
   {
-    var result = (await _userManager.RemoveFromRolesAsync(user, roleNames)).Succeeded;
-    
-    return result;
+    return (await _userManager.RemoveFromRolesAsync(user, roleNames)).Succeeded;
   }
 }

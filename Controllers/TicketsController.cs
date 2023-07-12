@@ -14,26 +14,22 @@ namespace BugTracker.Controllers;
 [Authorize]
 public class TicketsController : Controller
 {
-  private readonly IBTCompanyService       _companyService;
   private readonly IBTFileService          _fileService;
   private readonly IBTProjectService       _projectService;
   private readonly IBTTicketHistoryService _ticketHistoryService;
   private readonly IBTTicketService        _ticketService;
   private readonly UserManager<BTUser>     _userManager;
 
-  public TicketsController(
-    UserManager<BTUser>     userManager,
-    IBTTicketService        ticketService,
-    IBTProjectService       projectService,
-    IBTFileService          fileService,
-    IBTCompanyService       companyService,
-    IBTTicketHistoryService ticketHistoryService)
+  public TicketsController(UserManager<BTUser>     userManager,
+                           IBTTicketService        ticketService,
+                           IBTProjectService       projectService,
+                           IBTFileService          fileService,
+                           IBTTicketHistoryService ticketHistoryService)
   {
     _userManager          = userManager;
     _ticketService        = ticketService;
     _projectService       = projectService;
     _fileService          = fileService;
-    _companyService       = companyService;
     _ticketHistoryService = ticketHistoryService;
   }
 
@@ -128,20 +124,16 @@ public class TicketsController : Controller
   [HttpPost]
   [ValidateAntiForgeryToken]
   [Authorize]
-  public async Task<IActionResult> Create(
-    [Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
+  public async Task<IActionResult> Create([Bind("Id,Title,Description,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId")] Ticket ticket)
   {
     ModelState.Remove(nameof(Ticket.SubmitterUserId));
 
     if (ModelState.IsValid)
     {
-      var companyId = User.Identity!.GetCompanyId();
-
       ticket.Created         = DateTime.UtcNow;
       ticket.SubmitterUserId = _userManager.GetUserId(User);
 
       await _ticketService.AddTicketAsync(ticket);
-
       await _ticketHistoryService.AddHistoryAsync(null, ticket, _userManager.GetUserId(User)!);
 
       return RedirectToAction(nameof(Index));
@@ -168,8 +160,8 @@ public class TicketsController : Controller
       return NotFound();
 
     var priorities = await _ticketService.GetTicketPriorities();
-    var statuses = await _ticketService.GetTicketStatuses();
-    var types = await _ticketService.GetTicketTypes();
+    var statuses   = await _ticketService.GetTicketStatuses();
+    var types      = await _ticketService.GetTicketTypes();
 
     ViewData["TicketPriorityId"] = new SelectList(priorities, "Id", "Name");
     ViewData["TicketStatusId"]   = new SelectList(statuses,   "Id", "Name");
@@ -183,9 +175,7 @@ public class TicketsController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Edit(int id,
-    [Bind("Id,Title,Description,Created,Updated,Archived,ArchivedByProject,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperUserId,SubmitterUserId")]
-    Ticket ticket)
+  public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Created,Updated,Archived,ArchivedByProject,ProjectId,TicketTypeId,TicketStatusId,TicketPriorityId,DeveloperUserId,SubmitterUserId")] Ticket ticket)
   {
     if (id != ticket.Id) 
       return NotFound();
@@ -237,7 +227,8 @@ public class TicketsController : Controller
   {
     var ticket = await _ticketService.GetTicketByIdAsync(id, User.Identity!.GetCompanyId());
 
-    if (ticket != null) await _ticketService.ArchiveTicketAsync(ticket, User.Identity!.GetCompanyId());
+    if (ticket != null) 
+      await _ticketService.ArchiveTicketAsync(ticket, User.Identity!.GetCompanyId());
 
     return RedirectToAction(nameof(Index));
   }
@@ -280,12 +271,7 @@ public class TicketsController : Controller
     return View(await _ticketService.GetUserTicketsAsync(_userManager.GetUserId(User)!));
   }
 
-  public async Task<IActionResult> AllTickets()
-  {
-    return View(await _ticketService.GetTicketsByCompanyIdAsync(User.Identity!.GetCompanyId()));
-  }
-
-  public async Task<IActionResult> ArchivedTickets()
+  public async Task<IActionResult> Archived()
   {
     return View(await _ticketService.GetArchivedTicketsAsync(User.Identity!.GetCompanyId()));
   }
@@ -297,8 +283,7 @@ public class TicketsController : Controller
 
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> AddTicketAttachment(
-    [Bind("Id,FormFile,Description,TicketId")] TicketAttachment ticketAttachment)
+  public async Task<IActionResult> AddTicketAttachment([Bind("Id,FormFile,Description,TicketId")] TicketAttachment ticketAttachment)
   {
     string statusMessage;
     ModelState.Remove("BTUserId");
@@ -356,9 +341,7 @@ public class TicketsController : Controller
         ticketComment.UserId  = userId;
 
         await _ticketService.AddTicketCommentAsync(ticketComment);
-
-        await _ticketHistoryService.AddHistoryAsync(ticketComment.TicketId, nameof(TicketComment),
-          ticketComment.UserId!);
+        await _ticketHistoryService.AddHistoryAsync(ticketComment.TicketId, nameof(TicketComment), ticketComment.UserId!);
       }
 
       return RedirectToAction(nameof(Details), new { id = ticket.Id });

@@ -101,9 +101,6 @@ public static class DataUtility
       //Get company Ids
       company1Id = context.Companies.FirstOrDefault(p => p.Name == "Company1")!.Id;
       company2Id = context.Companies.FirstOrDefault(p => p.Name == "Company2")!.Id;
-      company3Id = context.Companies.FirstOrDefault(p => p.Name == "Company3")!.Id;
-      company4Id = context.Companies.FirstOrDefault(p => p.Name == "Company4")!.Id;
-      company5Id = context.Companies.FirstOrDefault(p => p.Name == "Company5")!.Id;
     }
     catch (Exception ex)
     {

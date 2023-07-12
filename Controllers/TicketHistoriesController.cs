@@ -11,10 +11,7 @@ public class TicketHistoriesController : Controller
 {
   private readonly ApplicationDbContext _context;
 
-  public TicketHistoriesController(ApplicationDbContext context)
-  {
-    _context = context;
-  }
+  public TicketHistoriesController(ApplicationDbContext context) => _context = context;
 
   // GET: TicketHistories
   public async Task<IActionResult> Index()
@@ -27,7 +24,7 @@ public class TicketHistoriesController : Controller
   // GET: TicketHistories/Details/5
   public async Task<IActionResult> Details(int? id)
   {
-    if (id == null || _context.TicketHistory == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketHistory = await _context.TicketHistory
@@ -55,8 +52,7 @@ public class TicketHistoriesController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create(
-    [Bind("Id,PropertyName,Description,Created,OldValue,NewValue,TicketId,UserId")] TicketHistory ticketHistory)
+  public async Task<IActionResult> Create([Bind("Id,PropertyName,Description,Created,OldValue,NewValue,TicketId,UserId")] TicketHistory ticketHistory)
   {
     if (ModelState.IsValid)
     {
@@ -75,7 +71,7 @@ public class TicketHistoriesController : Controller
   // GET: TicketHistories/Edit/5
   public async Task<IActionResult> Edit(int? id)
   {
-    if (id == null || _context.TicketHistory == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketHistory = await _context.TicketHistory.FindAsync(id);
@@ -93,8 +89,7 @@ public class TicketHistoriesController : Controller
   // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
   [HttpPost]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Edit(int id,
-    [Bind("Id,PropertyName,Description,Created,OldValue,NewValue,TicketId,UserId")] TicketHistory ticketHistory)
+  public async Task<IActionResult> Edit(int id, [Bind("Id,PropertyName,Description,Created,OldValue,NewValue,TicketId,UserId")] TicketHistory ticketHistory)
   {
     if (id != ticketHistory.Id) 
       return NotFound();
@@ -111,7 +106,7 @@ public class TicketHistoriesController : Controller
         if (!TicketHistoryExists(ticketHistory.Id))
           return NotFound();
         
-          throw;
+        throw;
       }
 
       return RedirectToAction(nameof(Index));
@@ -126,7 +121,7 @@ public class TicketHistoriesController : Controller
   // GET: TicketHistories/Delete/5
   public async Task<IActionResult> Delete(int? id)
   {
-    if (id == null || _context.TicketHistory == null) 
+    if (id == null) 
       return NotFound();
 
     var ticketHistory = await _context.TicketHistory
@@ -146,18 +141,14 @@ public class TicketHistoriesController : Controller
   [ValidateAntiForgeryToken]
   public async Task<IActionResult> DeleteConfirmed(int id)
   {
-    if (_context.TicketHistory == null) return Problem("Entity set 'ApplicationDbContext.TicketHistory'  is null.");
-
     var ticketHistory = await _context.TicketHistory.FindAsync(id);
-    if (ticketHistory != null) _context.TicketHistory.Remove(ticketHistory);
+    if (ticketHistory != null) 
+      _context.TicketHistory.Remove(ticketHistory);
 
     await _context.SaveChangesAsync();
     
     return RedirectToAction(nameof(Index));
   }
 
-  private bool TicketHistoryExists(int id)
-  {
-    return (_context.TicketHistory?.Any(e => e.Id == id)).GetValueOrDefault();
-  }
+  private bool TicketHistoryExists(int id) => (_context.TicketHistory?.Any(e => e.Id == id)).GetValueOrDefault();
 }

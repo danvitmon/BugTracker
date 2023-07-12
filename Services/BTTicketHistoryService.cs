@@ -10,10 +10,7 @@ public class BTTicketHistoryService : IBTTicketHistoryService
 {
   private readonly ApplicationDbContext _context;
 
-  public BTTicketHistoryService(ApplicationDbContext context)
-  {
-    _context = context;
-  }
+  public BTTicketHistoryService(ApplicationDbContext context) => _context = context;
 
   public async Task AddHistoryAsync(Ticket? oldTicket, Ticket newTicket, string userId)
   {
@@ -198,11 +195,12 @@ public class BTTicketHistoryService : IBTTicketHistoryService
       //
       //var otherTickets = projects.Select(p => p.Tickets).ToList();
       // same as below code
-      return company.Projects.SelectMany(p => p.Tickets)
+      return company.Projects
+        .SelectMany(p => p.Tickets)
         .SelectMany(t => t.History)
         .ToList    ();
     
-        return new List<TicketHistory>();
+    return new List<TicketHistory>();
   }
 
   public async Task<List<TicketHistory>> GetProjectTicketHistoriesAsync(int projectId, int companyId)
@@ -213,7 +211,8 @@ public class BTTicketHistoryService : IBTTicketHistoryService
       .ThenInclude        (h => h.User)
       .FirstOrDefaultAsync(p => p.Id == projectId && p.CompanyId == companyId);
 
-    if (project is null) return new List<TicketHistory>();
+    if (project is null) 
+      return new List<TicketHistory>();
 
     var history = project.Tickets.SelectMany(t => t.History).ToList();
 

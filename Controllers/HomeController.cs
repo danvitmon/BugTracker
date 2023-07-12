@@ -14,22 +14,17 @@ public class HomeController : Controller
 {
   public IActionResult Dashboard()
   {
-    var viewmodel = new DashboardViewModel();
+    // Leave it here temporarily for debugging purposes
+    var  viewmodel = new DashboardViewModel();
     int? companyId = User.Identity!.GetCompanyId();
 
     return View();
   }
 
   [AllowAnonymous]
-  public IActionResult Landing()
-  {
-    return View();
-  }
+  public IActionResult Landing() => View();
 
-  public IActionResult Index()
-  {
-    return View();
-  }
+  public IActionResult Index() => View();
 
   [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
   public IActionResult Error()

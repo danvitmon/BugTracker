@@ -18,8 +18,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-  .AddEntityFrameworkStores <ApplicationDbContext>        ()
+builder.Services
+  .AddIdentity              <BTUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+  .AddEntityFrameworkStores <ApplicationDbContext>()
   .AddClaimsPrincipalFactory<BTUserClaimsPrincipalFactory>()
   .AddDefaultUI()
   .AddDefaultTokenProviders();

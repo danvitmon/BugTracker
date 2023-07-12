@@ -13,12 +13,10 @@ public class BTImageService : IBTImageService
     if (fileData == null || fileData.Length == 0)
       switch (defaultImage)
       {
-        //Return the default user image if the value is 1
-        case 1: return _defaultUserImage;
-        //Return the default blog image if the value is 2
-        case 2: return _defaultBlogImage;
-        //Return the default category image if the value is 3
-        case 3: return _defaultCategoryImage;
+        case 1:  return _defaultUserImage;
+        case 2:  return _defaultBlogImage;
+        case 3:  return _defaultCategoryImage;
+        default: return null;
       }
 
     var imageBase64Data = Convert.ToBase64String(fileData);

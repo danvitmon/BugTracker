@@ -1,17 +1,15 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 
 ﻿﻿@using BugTracker.Models.Enums;
 @using BugTracker.Services.Interfaces
 
 @model Project
 
-@inject IBTRolesService     _rolesService
-@inject IBTProjectService   _projectService;
-@inject UserManager<BTUser> UserManager;
+@inject IBTRolesService   RolesService
+@inject IBTProjectService ProjectService;
 
 @{
-  ViewData["Title"] = "Details";
-
+   ViewData["Title"] = "Details";
 }
 
 <div class="p-3 d-flex flex-column">
@@ -75,13 +73,13 @@
               </div>
               <div class="card-footer fw-bold lead">
                 Project Manager: @* Either the PM's name or "Unassigned" *@
-                @if (await _projectService.GetProjectManagerAsync(Model.Id, Model.CompanyId) is null)
+                @if (await ProjectService.GetProjectManagerAsync(Model.Id, Model.CompanyId) is null)
                 {
                   <h5>Unassigned</h5>
                 }
                 else
                 {
-                  <h5>@((await _projectService.GetProjectManagerAsync(Model.Id, Model.CompanyId))!.FullName)</h5>
+                  <h5>@((await ProjectService.GetProjectManagerAsync(Model.Id, Model.CompanyId))!.FullName)</h5>
                 }
               </div>
               @* Only show the "manage project members" button if they're allowed to assign members to this project *@
@@ -112,7 +110,7 @@
                   </div>
                   <div class="card-body">
                     <ul>
-                      @foreach (var user in await _projectService.GetProjectMembersByRoleAsync(Model.Id, nameof(BTRoles.Developer), Model.CompanyId))
+                      @foreach (var user in await ProjectService.GetProjectMembersByRoleAsync(Model.Id, nameof(BTRoles.Developer), Model.CompanyId))
                       {
                         <li>@user.FullName</li>
                       }
@@ -128,7 +126,7 @@
                   </div>
                   <div class="card-body">
                     <ul>
-                      @foreach (var user in await _projectService.GetProjectMembersByRoleAsync(Model.Id, nameof(BTRoles.Submitter), Model.CompanyId))
+                      @foreach (var user in await ProjectService.GetProjectMembersByRoleAsync(Model.Id, nameof(BTRoles.Submitter), Model.CompanyId))
                       {
                         <li>@user.FullName</li>
                       }
@@ -166,7 +164,7 @@
           <tr>
             <td>
               <a class="btn btn-sm btn-soft-success" asp-controller="Tickets" asp-action="Details" asp-route-id="@ticket.Id">Edit</a>
-              @foreach (var user in await _rolesService.GetUsersInRoleAsync(nameof(BTRoles.Developer), Model.CompanyId))
+              @foreach (var user in await RolesService.GetUsersInRoleAsync(nameof(BTRoles.Developer), Model.CompanyId))
               {
               }
             </td>

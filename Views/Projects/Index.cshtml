@@ -5,9 +5,8 @@
 
 @model IEnumerable<BugTracker.Models.Project>
 
-@inject IBTFileService      _fileService;
-@inject IBTProjectService   _projectService;
-@inject IBTRolesService     _rolesService;
+@inject IBTFileService      FileService;
+@inject IBTProjectService   ProjectService;
 @inject UserManager<BTUser> UserManager;
 
 @{
@@ -34,7 +33,7 @@
             <div class="row">
               <div class="col">
                 <h5 style="color: darkred">
-                  @if (await _projectService.GetProjectManagerAsync(project.Id, project.CompanyId) == null)
+                  @if (await ProjectService.GetProjectManagerAsync(project.Id, project.CompanyId) == null)
                   {
                     <div class="row row-cols-2">
                       <div class="col d-flex align-items-center" style="color: darkred">Unassigned</div>
@@ -45,7 +44,7 @@
                   }
                   else
                   {
-                    @await _projectService.GetProjectManagerAsync(project.Id, project.CompanyId)
+                    @await ProjectService.GetProjectManagerAsync(project.Id, project.CompanyId)
                     ;
                     <h6 class="text-muted">Project Manager</h6>
                   }
@@ -89,14 +88,14 @@
             <div class="row row-cols-2">
               <div class="col">
                 Devlopers:
-                @foreach (var User in await _projectService.GetProjectMembersByRoleAsync(project.Id, nameof(BTRoles.Developer), project.CompanyId))
+                @foreach (var User in await ProjectService.GetProjectMembersByRoleAsync(project.Id, nameof(BTRoles.Developer), project.CompanyId))
                 {
                   <li>@user.FullName</li>
                 }
               </div>
               <div class="col">
                 Submitters:
-                @foreach (var User in await _projectService.GetProjectMembersByRoleAsync(project.Id, nameof(BTRoles.Submitter), project.CompanyId))
+                @foreach (var User in await ProjectService.GetProjectMembersByRoleAsync(project.Id, nameof(BTRoles.Submitter), project.CompanyId))
                 {
                   <li>@user.FullName</li>
                 }
@@ -153,7 +152,7 @@
               <div class="col-12 col-lg-4">
                 <div class="form-group">
                   <label asp-for="@project.ImageFormFile" class="control-label">Project Image</label>
-                  <img class="img-fluid border rounded-3 mb-2" style="max-height: 350px;" src="@_fileService.ConvertByteArrayToFile(project.ImageFileData, project.ImageFileType, DefaultImage.ProjectImage)" id="blogImage">
+                  <img class="img-fluid border rounded-3 mb-2" style="max-height: 350px;" src="@FileService.ConvertByteArrayToFile(project.ImageFileData, project.ImageFileType, DefaultImage.ProjectImage)" id="blogImage">
                   <input asp-for="@project.ImageFormFile" type="file" class="form-control mt-3 pt-2" accept=".png,.jpg,.jpeg,.gif"
                          onchange="document.getElementById('blogImage').src = window.URL.createObjectURL(this.files[0])"/>
                 </div>

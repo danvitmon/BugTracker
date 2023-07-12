@@ -26,7 +26,8 @@ public class BTTicketService : IBTTicketService
 
   public async Task ArchiveTicketAsync(Ticket ticket, int companyId)
   {
-    var project = await _context.Projects.Where(p => p.CompanyId == companyId)
+    var project = await _context.Projects
+      .Where              (p => p.CompanyId == companyId)
       .FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
 
     if (project == null) 
@@ -165,7 +166,8 @@ public class BTTicketService : IBTTicketService
 
   public async Task RestoreTicketAsync(Ticket ticket, int companyId)
   {
-    var project = await _context.Projects.Where(p => p.CompanyId == companyId)
+    var project = await _context.Projects
+      .Where              (p => p.CompanyId == companyId)
       .FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
 
     if (project == null) 
@@ -178,7 +180,8 @@ public class BTTicketService : IBTTicketService
 
   public async Task UpdateTicketAsync(Ticket ticket, int companyId)
   {
-    var project = await _context.Projects.Where(p => p.CompanyId == companyId)
+    var project = await _context.Projects
+      .Where              (p => p.CompanyId == companyId)
       .FirstOrDefaultAsync(p => p.Id == ticket.ProjectId);
 
     if (project == null) 
@@ -197,7 +200,7 @@ public class BTTicketService : IBTTicketService
   public async Task<TicketAttachment?> GetTicketAttachmentByIdAsync(int ticketAttachmentId)
   {
     var ticketAttachment = await _context.TicketAttachments
-      .Include(t => t.BTUser)
+      .Include            (t => t.BTUser)
       .FirstOrDefaultAsync(t => t.Id == ticketAttachmentId);
 
     return ticketAttachment;
